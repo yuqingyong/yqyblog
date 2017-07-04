@@ -1,0 +1,145 @@
+  <section class="container">
+  <div class="content-wrap">
+    <div class="content">
+      <header class="article-header">
+        <h1 class="article-title"><a  title="{$art_detail.title}" >{$art_detail.title}</a></h1>
+        <div class="article-meta"> <span class="item article-meta-time">
+          <time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="发表时间：{$art_detail.create_time|date='Y-m-d H:i',###}"><i class="glyphicon glyphicon-time"></i> {$art_detail.create_time|date='Y-m-d H:i',###}</time>
+          </span> <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="来源：{$art_detail.author}"><i class="glyphicon glyphicon-globe"></i> {$art_detail.author}</span> <span class="item article-meta-category" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="MZ-NetBlog主题"><i class="glyphicon glyphicon-list"></i>
+                  {switch name="$art_detail['cid']"}
+                    {case value="7"}资讯分享{/case}
+                    {case value="2"}技术分享{/case}
+                    {case value="3"}源码分享{/case}
+                    {case value="4"}随心笔记{/case}
+                    {case value="5"}推荐文章{/case}
+                    {/switch}</a></span> <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="浏览量：{$art_detail.click}"><i class="glyphicon glyphicon-eye-open"></i> {$art_detail.click}</span> <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> {$art_detail.comment_num}</span> </div>
+      </header>
+      <article class="article-content">
+          {$art_detail.content}
+      </article>
+      <div class="relates">
+        <div class="title">
+          <h3>相关推荐</h3>
+        </div>
+        <ul>
+          {volist name="e_article" id="va"}
+              <li><a href="{:url('Home/Articles/detail',array('aid'=>$va['aid']))}" title="" >{$va.title}</a></li>
+          {/volist}
+        </ul>
+      </div>
+      <div class="title" id="comment">
+        <h3>评论</h3>
+      </div>
+      <div id="respond">
+                <div class="comment">
+                    <!-- <input name="user_name" id="" class="form-control" size="22" placeholder="您的昵称（必填）" maxlength="15" autocomplete="off" tabindex="1" type="text">
+                    <input name="email" id="" class="form-control" size="22" placeholder="您的网址或邮箱（非必填）" maxlength="58" autocomplete="off" tabindex="2" type="text"> -->
+                    <div class="comment-box">
+                        <textarea placeholder="您的评论或留言（必填）" name="content" id="comment-textarea" cols="100%" rows="3" tabindex="3"></textarea>
+                        <div class="comment-ctrl">
+                            <button type="button" name="comment-submit" id="comment-submit" tabindex="4" onclick="add_comment({$art_detail.aid})">评论</button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+      <div id="postcomments">
+        <ol id="comment_list" class="commentlist"> 
+        {volist name="comments" id="va"}
+        <li class="comment-content"><span class="comment-f">{$va.date|date='Y-m-d H:i',###}</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">{$va.username}</a><span class="time">2</span><br>{$va.content}</p></div></li>
+        {volist name="va.child" id="vo"}
+          <li class="comment-content" style="padding-left: 50px;"><span class="comment-f">{$vo.date|date='Y-m-d H:i',###}</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">{$vo.username}</a><span class="time">2</span><br>{$vo.content}</p></div></li>
+        {volist name="vo.child" id="ve"}
+          <li class="comment-content" style="padding-left: 100px;"><span class="comment-f">{$ve.date|date='Y-m-d H:i',###}</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">{$ve.username}</a><span class="time">2</span><br>{$ve.content}</p></div></li>
+        {/volist}
+        {/volist}
+        {/volist}
+		    </ol>
+      </div>
+    </div>
+  </div>
+  <aside class="sidebar">
+    <div class="fixed">
+      <div class="widget widget-tabs">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab" data-toggle="tab" >统计信息</a></li>
+          <li role="presentation"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab" >联系站长</a></li>
+        </ul>
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane contact active" id="notice">
+            <h2>日志总数:{$web.all_article_num}篇
+              </h2>
+              <h2>网站运行:
+              <span id="sitetime">{$web.web_day}天 </span></h2>
+          </div>
+            <div role="tabpanel" class="tab-pane contact" id="contact">
+              <h2>QQ:
+                  <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1425219094&amp;site=qq&amp;menu=yes" target="_blank" rel="nofollow" data-toggle="tooltip" data-placement="bottom" title=""  data-original-title="QQ:1425219094">1425219094</a>
+              </h2>
+              <h2>Email:
+              <a href="mailto:1425219094@qq.com" target="_blank" data-toggle="tooltip" rel="nofollow" data-placement="bottom" title=""  data-original-title="Email:1425219094@qq.com">1425219094@qq.com</a></h2>
+          </div>
+        </div>
+      </div>
+      <div class="widget widget_search">
+        <form class="navbar-form" action="{:url('home/Index/article_search')}" method="get">
+          <div class="input-group">
+            <input type="text" name="word" class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off">
+            <span class="input-group-btn">
+            <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+            </span> </div>
+        </form>
+      </div>
+    </div>
+    <div class="widget widget_hot">
+          <h3>最热文章</h3>
+          <ul>     
+            {volist name="hot_article" id="va"}  
+                <li><a title="{$va.title}" href="{:url('home/Articles/detail',array('aid'=>$va['aid']))}" ><span class="thumbnail">
+                    <img class="thumb" data-original="{$va.path}" src="{$va.path}" alt="{$va.title}"  style="display: block;">
+                </span><span class="text">{$va.title}</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
+                    {$va.create_time}
+                </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>{$va.click}</span></a></li>
+            {/volist}
+          </ul>
+     </div>
+     <div class="widget widget_sentence">    
+        <a href="__PUBLIC__/home/images/ad1.jpg" target="_blank" rel="nofollow" title="广告位一" >
+        <img style="width: 100%" src="__PUBLIC__/home/images/ad1.jpg" alt="广告位一" ></a>    
+     </div>
+     <div class="widget widget_sentence">    
+        <a href="__PUBLIC__/home/images/ad2.jpg" target="_blank" rel="nofollow" title="广告位二" >
+        <img style="width: 100%" src="__PUBLIC__/home/images/ad2.jpg" alt="广告位二" ></a>    
+     </div>
+  </aside>
+</section>
+</body>
+<script>
+  //添加评论
+  function add_comment(aid){
+    var content = $("#comment-textarea").val();
+    if(content == ''){
+    	layer.msg('评论的内容不能为空！')
+    }else{
+    	$.ajax({
+	       url:"{:url('home/Comments/add_comment')}",
+	       type:'post',
+	       data:{'aid':aid,'content':content},
+	       success:function(msg){
+	          var _json = JSON.parse(msg);
+	          if(_json.ok == 'y'){
+	            layer.msg('评论成功！')
+	            setTimeout(function() {
+	                location.reload();
+	            }, 3000);
+	          }else{
+	            layer.msg('您还未登录，请先登录！')
+	            setTimeout(function() {
+	                location.reload();
+	            }, 3000);
+	          }
+	       }
+	     })
+    }
+  }
+</script>
+</html>

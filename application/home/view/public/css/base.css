@@ -1,0 +1,164 @@
+/**
+  * 描    述：重置,布局及基础样式
+  * 涉及区域：公共,全局
+  */
+
+html,body {
+	font-size: 14px;
+	font-family: "Century Gothic","Microsoft yahei";
+	color: #323232;
+	background-color: #F9F9F9;
+}
+body,p,h1,h2,h3,h4,h5,h6,
+dl,dt,dd,ul,ol,li,
+form,input,textarea,button,
+pre,img {
+	margin: 0;
+	padding: 0;
+}
+ul,ul li {
+	list-style: none;
+}
+img {
+	border: 0;
+}
+a{
+	color: #444;
+	text-decoration: none;
+}
+a:hover{
+	color: #093;
+	text-decoration: underline;
+}
+input,textarea,select {
+	font-size: 100%;
+	outline: 0;
+	resize: none;
+	color: #323232;
+	font-family: "微软雅黑";
+}
+
+/* 布局 */
+.fl {
+	float:left;
+	display:inline;
+}
+.fr {
+	float:right;
+	display:inline;
+}
+.cf {
+	zoom:1;
+}
+.cf:after {
+	display:block;
+	visibility:hidden;
+	width:0;
+	height:0;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	content:".";
+}
+.main {
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 70px;
+	width: 1200px;
+	min-height: 500px;
+	height: auto!important;
+}
+.wrapper {
+	float: left;
+	width: 765px;
+}
+.sidebar {
+	float: right;
+	width: 350px;
+}
+.box {
+	margin-bottom: 10px;
+	border: 1px solid #D4D4D4;
+	background-color: #FFF;
+}
+
+/* 公用样式 */
+.hidden {
+	display: none!important;
+}
+.b0 {
+    border: 0!important;
+}
+.avatar {
+	display: block;
+	position: absolute;
+	top: 3px;
+	left: 0;
+	padding: 1px;
+	width: 44px;
+	height: 44px;
+	line-height: 44px;
+	text-align: center;
+	overflow: hidden;
+	border: 1px solid #D4D4D4;
+}
+.avatar img{
+	width: 44px;
+}
+.loading-box {
+	text-align: center;
+}
+.loading {
+	display: inline-block;
+	padding: 15px 15px 15px 55px;
+	font-size: 16px;
+	color: #FFF;
+	border-radius: 5px;
+	background: url(../img/loading.gif) no-repeat 15px center #565656;
+}
+
+/* 返回顶部样式 */
+#gotoTop{
+	display:none;
+	position:fixed;
+	top:75%;
+	left:50%;
+	cursor:pointer;
+	margin-top:-50px;
+	margin-left:520px;
+	width: 64px;
+	height:64px;
+	line-height: 100;
+	overflow: hidden;
+	background: url(../img/gTopa.png) no-repeat;
+}
+#gotoTop{
+	_position:absolute;
+	_top:expression_r(documentElement.scrollTop + documentElement.clientHeight * 3/4 + "px");
+}
+/*#gotoTop.hover{
+	background:#5CB542;
+	color:#fff;
+	text-decoration:none;
+}*/
+
+
+/* 代码复制 */
+.think-copy { position: absolute; top: -1px; right: -1px; width: 80px; height: 27px; line-height: 27px; text-align: center; border: 1px solid #CCC; background-color: #FFF;}
+.think-copy span{ display: inline-block; width: 80px; height:  27px;}
+
+/*Validform*/
+.Validform_checktip{ margin-left:2px; font-size: 14px; overflow:hidden; color:#999; display:inline-block; min-width:50px; vertical-align:middle; }
+.Validform_right { color:#71b83d; padding-left:5px; background:url(../Images/right.png) no-repeat left center; text-indent:-9999px; }
+.Validform_wrong { color:red; padding-left:5px; white-space:nowrap;	}
+.Validform_loading { padding-left:5px; background:url(../Images/onLoad.gif) no-repeat left center; }
+.Validform_error { background-color:#ffe7e7; }
+.popLogin .Validform_right,
+.popLogin .Validform_wrong,
+.popLogin .Validform_loading { padding-left:0; }
+#Validform_msg{color:#7d8289; font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif; width:280px; -webkit-box-shadow:2px 2px 3px #aaa; -moz-box-shadow:2px 2px 3px #aaa; background:#fff; position:absolute; top:0px; right:50px; z-index:99999; display:none;filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');}
+#Validform_msg .iframe{position:absolute; left:0px; top:-1px; z-index:-1;}
+#Validform_msg .Validform_title{line-height:25px; height:25px; text-align:left; font-weight:bold; padding:0 8px; color:#fff; position:relative; background-color:#000;}
+#Validform_msg a.Validform_close:link,#Validform_msg a.Validform_close:visited{line-height:22px; position:absolute; right:8px; top:0px; color:#fff; text-decoration:none;}
+#Validform_msg a.Validform_close:hover{color:#cc0;}
+#Validform_msg .Validform_info{padding:8px;border:1px solid #000; border-top:none; text-align:left;}

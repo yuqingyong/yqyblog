@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="Generator" content="ECJIA 1.5">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="Keywords" content="">
+		<meta name="Description" content="">
+		<title>用户注册</title>
+		<link rel="stylesheet" href="__PUBLIC__/home/css/bootstrap.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/home/css/index.css">
+	</head>
+	<body>
+		<script type="text/javascript" src="__PUBLIC__/home/js/jquery-2.1.4.min.js"></script>
+		<div class="fl wfs bcf7">
+			<div class="regist-process-wrapper">
+				<div class="regist-process-body fl wfs">
+
+					<div class="regist-process-register-left fl">
+						<h2 class="title">用户注册</h2>
+						<form id="registerForm" action="{:url('home/Index/register')}" method="post" name="formUser">
+							<div>
+								<span class="title">用户名：</span>
+								<input class="form-control text" id="username" onblur="check_username()" name="username" type="text">
+								<p class="tips" id="username_notice"></p>
+							</div>
+							<div>
+								<span class="title">邮箱：</span>
+								<input id="email" class="form-control text" type="text" onblur="check_email()" name="email">
+								<p class="tips" id="email_notice"></p>
+							</div>
+
+							<div>
+								<span class="title">密码：</span>
+								<input class="form-control text" id="password" name="password" onblur="is_password()" type="password">
+								<p class="tips" id="password_notice"></p>
+							</div>
+							<div>
+								<span class="title">确认密码：</span>
+								<input class="form-control text" id="confirm" onblur="check_password()" name="confirm_password" type="password">
+								<p class="tips" id="conform_password_notice"></p>
+							</div>
+							<div>
+								<span class="title" style="margin-top:20px;">验证码：</span>
+								<input type="text" size="8" name="code" class="form-control text fl" style="width:100px;">
+								<img src="{:captcha_src()}" alt="captcha" class="fl" style="cursor: pointer;margin-top:16px;margin-left:10px;"  onclick="this.src='{:captcha_src()}?seed='+Math.random()">
+							</div>
+							<input class="btn btn-danger register-now"  type="submit" value="立即注册">
+						</form>
+					</div>
+
+					<div class="regist-process-register-right fr">
+						<h2 class="title">我已注册账号</h2>
+						<a class="btn btn-info login-now" href="{:url('home/Index/login')}">立即登录</a>
+						<span class="other-account">其他网站账号登陆</span>
+						<div class="other-login ">
+							<a class="qq" href="http://member.ecmoban.com/user.php?act=qq">qq</a>
+							<a class="sina" href="http://member.ecmoban.com/user.php?act=sina" target="_blank">新浪微博</a>
+							<a class="alipay" href="http://member.ecmoban.com/user.php?act=alipay" target="_blank">支付宝</a>
+							<a class="weixin" href="http://member.ecmoban.com/user.php?act=wechat" target="_blank">微信</a>
+						</div>
+						<div class="scan">
+							<img src="__PUBLIC__/home/images/register-code.jpg" alt="">
+							<span>扫描我，关注微信公众号</span>
+						</div>
+						<p class="pre-consultation">站长微信<b>181-7023-7185</b></p>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="blank"></div>
+		{include file="public/footer" /}
+		<script src="__PUBLIC__/home/js/bootstrap.min.js"></script>
+	</body>
+<script type="text/javascript">
+//验证账号是否存在
+function check_username(){
+	var username = $("#username").val();
+	
+	if(username == ''){
+		$("#username_notice").html('账号不能为空');
+   		return false;
+	}	
+	var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+	if(reg.test(username)){     
+       $("#username_notice").html('不能输入汉字');
+       $("#username").val('');
+　　 }else{
+		$.ajax({
+			type:"post",
+			url:"{:url('home/Index/check_username')}",
+			data:{"username":username},
+			success:function(msg){
+				var _json = JSON.parse(msg);
+				if(_json.ok == 'n'){
+					$("#username_notice").html('用户名已存在');
+				}else{
+					$("#username_notice").html('可以注册');
+				}
+			}
+		});	
+	}	
+}
+//验证邮箱
+function check_email(){
+  if($("#email").val()=="")
+  {
+   $("#email_notice").html('邮箱不能为空');
+   return false;
+  }
+  var email=$("#email").val();
+  if(!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/))
+  {
+   $("#email_notice").html('格式不正确！请重新输入');
+   $("#email").focus();
+  }
+}
+
+//验证密码格式
+function is_password(){
+  if($("#password").val()=="")
+  {
+    $("#password_notice").html('密码不能为空');
+    return false;
+  }
+}
+
+
+//验证两次密码是否一样conform_password_notice
+function check_password(){
+	if($("#confirm").val()=="")
+	{
+	    $("#conform_password_notice").html('确认密码不能为空');
+	    return false;
+	}
+	var password_one = $("#password").val();
+	var password_two = $("#confirm").val();
+	if(password_one != password_two){
+		$("#conform_password_notice").html('两次密码不一样，请重新输入');
+		$("#conform_password_notice").val('');
+	}else{
+		$("#conform_password_notice").html('确认正确');
+	}
+}
+
+</script>
+</html>

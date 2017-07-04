@@ -1,0 +1,79 @@
+<section class="container">
+	<div class="content-wrap">
+		<div class="content">
+			<div style="text-align: right;"><a href="#">私信他（她）</a></div>
+			<header class="article-header">
+				<h1 class="article-title"><a  title="{$art_detail.title}" >{$art_detail.title}</a></h1>
+				<div class="article-meta"> <span class="item article-meta-time">
+		          <time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="发表时间：{$art_detail.create_time}"><i class="glyphicon glyphicon-time"></i> {$art_detail.create_time}</time>
+		          </span> <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="来源：{$art_detail.type}"><i class="glyphicon glyphicon-globe"></i> {$art_detail.type}</span> <span class="item article-meta-category" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="MZ-NetBlog主题"><i class="glyphicon glyphicon-list"></i>
+                  需求详情</a></span> <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="浏览量：{$art_detail.see_num}"><i class="glyphicon glyphicon-eye-open"></i> {$art_detail.see_num}</span> <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> {$art_detail.comment_num}</span> </div>
+			</header>
+			<article class="article-content">
+				{$art_detail.content}
+			</article>
+		</div>
+	</div>
+	<aside class="sidebar">
+		<div class="fixed">
+			<div class="widget widget-tabs">
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active">
+						<a href="#notice" aria-controls="notice" role="tab" data-toggle="tab" draggable="false">统计信息</a>
+					</li>
+					<li role="presentation">
+						<a href="#contact" aria-controls="contact" role="tab" data-toggle="tab" draggable="false">联系站长</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane contact active" id="notice">
+						<h2>日志总数:{$web.all_article_num}篇
+              </h2>
+						<h2>网站运行:
+              <span id="sitetime">{$web.web_day}天 </span></h2>
+					</div>
+					<div role="tabpanel" class="tab-pane contact" id="contact">
+						<h2>QQ:
+                  <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1425219094&amp;site=qq&amp;menu=yes" target="_blank" rel="nofollow" data-toggle="tooltip" data-placement="bottom" title=""  data-original-title="QQ:1425219094">1425219094</a>
+              </h2>
+              <h2>Email:
+              <a href="mailto:1425219094@qq.com" target="_blank" data-toggle="tooltip" rel="nofollow" data-placement="bottom" title=""  data-original-title="Email:1425219094@qq.com">1425219094@qq.com</a></h2>
+					</div>
+				</div>
+			</div>
+			<div class="widget widget_search">
+				<form class="navbar-form" action="{:url('home/Index/article_search')}" method="post">
+					<div class="input-group">
+						<input type="text" name="word" class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off">
+						<span class="input-group-btn">
+			            <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+			            </span> 
+			        </div>
+				</form>
+			</div>
+		</div>
+		<div class="widget widget_hot">
+			<h3>最热文章</h3>
+			<ul>
+				{volist name="hot_article" id="va"}  
+                <li><a title="{$va.title}" href="{:url('home/Articles/detail',array('aid'=>$va['aid']))}" ><span class="thumbnail">
+                    <img class="thumb" data-original="{$va.path}" src="{$va.path}" alt="{$va.title}"  style="display: block;">
+                </span><span class="text">{$va.title}</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
+                    {$va.create_time}
+                </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>{$va.click}</span></a></li>
+            	{/volist}
+			</ul>
+		</div>
+		<div class="widget widget_sentence">    
+        	<a href="__PUBLIC__/home/images/ad1.jpg" target="_blank" rel="nofollow" title="广告位一" >
+        	<img style="width: 100%" src="__PUBLIC__/home/images/ad1.jpg" alt="广告位一" ></a>    
+	    </div>
+	    <div class="widget widget_sentence">    
+	        <a href="__PUBLIC__/home/images/ad2.jpg" target="_blank" rel="nofollow" title="广告位二" >
+	        <img style="width: 100%" src="__PUBLIC__/home/images/ad2.jpg" alt="广告位二" ></a>    
+	    </div>
+	</aside>
+</section>
+</body>
+
+</html>

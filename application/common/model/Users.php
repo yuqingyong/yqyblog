@@ -1,0 +1,53 @@
+<?php
+namespace app\common\model;
+use think\db;
+use think\Model;
+/**	
+ * 用户表模型
+ */
+class Users extends Model{
+	//读取会员列表
+	public function get_user_page($type='all',$status='all',$limit=10,$kw='')
+	{
+		//判断查询类型
+		if($type == 'all' && $kw == ''){
+			if($status == 'all'){
+				$where = true;
+			}else{
+				$where = ['status'=>$stauts];
+			}
+			$list = db('users')->where($where)->paginate($limit);
+		}elseif(!empty($kw)){
+			//$where = ['nickname',['like',"%".$kw."%"]];
+			$list = db('users')->where(['nickname'  =>  ['like',"%".$kw."%"]])->paginate($limit);
+		}else{
+			$where = ['type'=>$type];
+			$list = db('users')->where($where)->paginate($limit);
+		}
+
+		//分配变量
+		$page = $list->render();
+		$data = ['list'=>$list,'page'=>$page];
+		return $data;
+	}
+
+
+	//验证密码
+	public function check_password($username = '' , $password = '')
+	{
+		//查询是否存在该用户 用户状态是否为启用状态 1
+		$res = DB::table('yqy_users')->where(['username'=>$username,'password'=>$password])->field('type,status,uid,username')->find();
+		if($res > 0){
+			//如果验证通过则更新用户的登录IP和时间
+			$data['last_login_time'] = date('Y-m-d H:i:s',time());
+			$data['last_login_ip']   = get_real_ip();
+			$result = DB::table('yqy_users')->where('uid',$res['uid'])->field('last_login_time,last_login_ip')->update($data);
+			return $res;
+		}
+		return false;
+	}
+
+
+
+
+}

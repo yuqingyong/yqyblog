@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="__PUBLIC__/admin/css/pintuer.css">
+<link rel="stylesheet" href="__PUBLIC__/admin/css/admin.css">
+<script src="__PUBLIC__/admin/js/jquery.js"></script>
+<script src="__PUBLIC__/admin/js/pintuer.js"></script>
+<link href="__PUBLIC__/admin/blue/doubleDate.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/admin/time/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/admin/time/doubleDate2.0.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>添加广告</strong></div>
+  <div class="body-content">
+    <form method="post" class="form-x" action="{:url('admin/Elses/edit_img')}" enctype="multipart/form-data">  
+      <div class="form-group">
+        <div class="label">
+          <label>图片名：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" value="{$img.mname}" name="mname"/>
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>URL：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" value="{$img.url}" name="url"  placeholder="请正确填写：http://www.baidu.com" />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>来源：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" value="{$img.from}" name="from" />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>开始时间：</label>
+        </div>
+        <div class="field">
+          <input type="text" readonly="readonly" class="doubledate ipticon" name="create_time" value="{:date('Y-m-d',$img.create_time)}" />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>结束时间：</label>
+        </div>
+        <div class="field">
+          <input type="text" readonly="readonly" class="doubledate ipticon" name="end_time" value="{:date('Y-m-d',$img.end_time)}" />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>图片：</label>
+        </div>
+        <div class="field">
+          <input type="file" name="img" class="file_upload" multiple="multiple">
+          <img src="{$img.img}" class="img_upload" style="width:100px;height:100px;">
+        </div>
+      </div>
+      <div class="clear"></div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <input type="hidden" name="mid" value="{$img.mid}">
+          <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+<script type="text/javascript">
+$(function(){
+  
+  $('.doubledate').kuiDate({
+    className:'doubledate',
+    isDisabled: "0"  
+  });
+
+});
+</script>
+<script>
+
+    $(".file_upload").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        // console.log("objUrl = "+objUrl);
+        if (objUrl) {
+            $(".img_upload").eq($(".file_upload").index(this)).attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ; 
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+</script>
+</html>
