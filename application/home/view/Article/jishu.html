@@ -16,7 +16,7 @@
             <h2><a href="{:url('home/Articles/detail',array('aid'=>$va['aid']))}" title="$va['title']" target="_blank" >{$va['title']}</a></h2>
           </header>
             <p class="meta">
-            <time class="time"><i class="glyphicon glyphicon-time"></i> {$va['create_time']}</time>
+            <time class="time"><i class="glyphicon glyphicon-time"></i> {$va['create_time']|date='Y-m-d H:i',###}</time>
             <span class="views"><i class="glyphicon glyphicon-eye-open"></i> {$va['click']}</span> <a class="comment" href="/" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>{$va['comment_num']}</a></p>
           <p class="note">{$va['description']}</p>
         </article>

@@ -22,7 +22,7 @@
                 </h2>
             </header>
             <p class="meta">
-                <time class="time"><i class="glyphicon glyphicon-time"></i> {$val.create_time}</time>
+                <time class="time"><i class="glyphicon glyphicon-time"></i> {$val.create_time|date='Y-m-d H:i',###}</time>
                 <span class="views"><i class="glyphicon glyphicon-eye-open"></i> {$val.click}</span> <a class="comment" href="#" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>{$val.comment_num}</a>
             </p>
             <p class="note">{$val.description}</p>

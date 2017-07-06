@@ -23,9 +23,11 @@ class Index extends Homebase
     	$web['web_day'] = timediff(1493568000,time());
 
     	//友情链接
-    	$link = db('link')->where('is_show',1)->order('sort desc')->cache(true,60)->select();
+    	$link = db('link')->where('is_show',1)->order('sort desc')->cache('link',60)->select();
+
     	//查询首页轮播图
-    	$banner = db('advert')->where(['type'=>1,'is_show'=>1])->field('mid,mname,img,url')->select();
+    	$banner = db('advert')->where(['type'=>1,'is_show'=>1])->field('mid,mname,img,url')->cache('banner',60)->select();
+    	
     	//读取最新发布的文章
 		$article = new Article();
     	$res = $article->getPageData('all','all','1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');

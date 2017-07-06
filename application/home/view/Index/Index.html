@@ -27,7 +27,7 @@
         <article class="excerpt-minic excerpt-minic-index">
             <h2><span class="red">【公告】</span><a target="_blank" href="/" title="" >本站源码下载</a>
             </h2>
-            <p class="note">本站的源码可供免费下载，下载地址是github（https://github.com/yuqingyong/choujiang），无论是转载任何文章，都需要注明来源！</p>
+            <p class="note">本站的源码可供免费下载，下载地址是https://github.com/yuqingyong/yqyblog，无论是转载任何文章，都无需打招呼！</p>
         </article>
       <div class="title">
         <h3>最新发布</h3>
@@ -114,6 +114,14 @@
         <a href="__PUBLIC__/home/images/ad2.jpg" target="_blank" rel="nofollow" title="广告位二" >
         <img style="width: 100%" src="__PUBLIC__/home/images/ad2.jpg" alt="广告位二" ></a>    
      </div>
+     <div class="widget widget_sentence">
+      <h3>友情链接</h3>
+      <div class="widget-sentence-link">
+        {volist name="link" id="va"}
+        <a href="{$va.url}" title="{$va.lanem}" target="_blank" >{$va.lanem}</a>&nbsp;&nbsp;&nbsp;
+        {/volist}
+      </div>
+    </div>
   </aside>
 </section>
 </body>
