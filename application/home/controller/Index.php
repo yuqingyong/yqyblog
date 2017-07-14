@@ -18,10 +18,6 @@ class Index extends Homebase
 
     public function index()
     {
-    	//统计网站信息
-    	$web['all_article_num'] = db('article')->count();
-    	$web['web_day'] = timediff(1493568000,time());
-
     	//友情链接
     	$link = db('link')->where('is_show',1)->order('sort desc')->cache('link',60)->select();
 
@@ -36,7 +32,6 @@ class Index extends Homebase
         	'banner'=>$banner,
         	'list'=>$res['list'],
         	'page'=>$res['page'],
-        	'web'=>$web,
         	'link'=>$link
         ]);
     }

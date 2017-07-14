@@ -16,9 +16,6 @@ class Articles extends Homebase
     //文章详情
     public function detail()
     {
-    	//统计网站信息
-    	$web['all_article_num'] = db('article')->count();
-    	$web['web_day'] = timediff(1493568000,time());
     	//获取AID查询文章详情
     	$aid = input('aid');
     	$result = db('article')->where('aid',$aid)->find();
@@ -34,7 +31,6 @@ class Articles extends Homebase
     	$this->click($aid);
     	return view('Article/detail',
             ['art_detail'=>$result,
-            'web'=>$web,
             'e_article'=>$e_article['list'],
             'comments'=>$comments
             ]);

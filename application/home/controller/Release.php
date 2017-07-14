@@ -61,12 +61,9 @@ class Release extends Homebase
   {
   	$xid = input('xid');
   	$this->see_num($xid);
-  	//统计网站信息
-	$web['all_article_num'] = db('article')->count();
-	$web['web_day'] = timediff(1493568000,time());
 	//查询详情
 	$detail = db('demand')->where('xid',$xid)->find();
-  	return view('Release/demand_detail',['web'=>$web,'art_detail'=>$detail]);
+  	return view('Release/demand_detail',['art_detail'=>$detail]);
   }
 
 

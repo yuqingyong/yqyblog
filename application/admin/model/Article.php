@@ -46,6 +46,7 @@ class Article extends Model{
 			      ->where($where)->order('a.sort desc')->field($field)->cache(true,60)->paginate($limit);
 
 		}
+		//echo db('article')->getlastsql();die;
 		$page = $list->render();
 		$data = ['list'=>$list,'page'=>$page];
 		return $data;

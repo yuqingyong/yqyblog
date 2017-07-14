@@ -59,7 +59,7 @@
                 <li><a title="{$va.title}" href="{:url('home/Articles/detail',array('aid'=>$va['aid']))}" ><span class="thumbnail">
                     <img class="thumb" data-original="{$va.path}" src="{$va.path}" alt="{$va.title}"  style="display: block;">
                 </span><span class="text">{$va.title}</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-                    {$va.create_time}
+                    {$va.create_time|date='Y-m-d H:i',###}
                 </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>{$va.click}</span></a></li>
             {/volist}
           </ul>
