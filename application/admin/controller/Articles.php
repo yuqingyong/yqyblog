@@ -151,17 +151,21 @@ class Articles extends Adminbase
     public function c_del()
     {
     	$aid = input('post.aid');
-    	//删除文章
-    	$res = db('article')->where('aid',$aid)->delete();
-    	if($res)
+    	//查询是否存在此文章
+    	$article = db('article')->where('aid',$aid)->field('aid')->find();
+    	//查询图片路径
+    	$path    = db('article_pic')->where('aid',$aid)->field('path')->find();
+    	if($article)
     	{
-    		//同时删除文章的封面图和标签
+    		//如果存在则删除该条数据，并且删除图片的源文件
+    		$res = db('article')->where('aid',$aid)->delete();
     		db('article_pic')->where('aid',$aid)->delete();
     		db('article_tag')->where('aid',$aid)->delete();
+    		unlink('.'.$path['path']);
     		echo json_encode(['ok'=>'y']);exit;
     	}
+    	
     }
-
 
 
 

@@ -22,5 +22,27 @@ class Chat extends Homebase
      $tags = db('tags')->order('tid desc')->select();
      return view('Chat/chat',['chat'=>$chat,'tags'=>$tags]);
    } 
+
+   //心愿墙页面
+   public function message(Request $request)
+   {
+   	 $this->view->engine->layout(false);
+   	 //查询留言数据
+   	 $message = db('message')->where('is_show',1)->order('id desc')->select();
+   	 if($request->ispost())
+   	 {
+   	 	if(!empty(input('post.content')))
+   	 	{
+   	 		$data['content'] = input('post.content','','htmlentities');
+	   	 	$data['nickname']= input('post.nickname') ? input('post.nickname') : '游客';
+	   	 	$data['create_time'] = time();
+	   	 	$res = db('message')->insert($data);
+	   	 	if($res){$this->success('提交成功...');exit;}
+   	 	}else{$this->error('亲，请输入想说的话！');exit;}
+   	 	
+   	 }
+   	 return view('Chat/message',['message'=>$message]);
+   }
+
    
 }
