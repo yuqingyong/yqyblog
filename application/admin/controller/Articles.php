@@ -27,26 +27,7 @@ class Articles extends Adminbase
     		$data = input('post.');
     		$data['create_time'] = time();
     		$article = new Article();
-    		$result = $article->validate(
-			    [
-			        'title'  => 'require|max:25',
-			        'cid'    => 'require',
-			        'author' => 'require',
-			        'content'=> 'require',
-			        'sort'   => 'number',
-			        'click'  => 'number',
-			    ],
-			    [
-			        'title.require' => '名称必须',
-			        'title.max'     => '名称最多不能超过25个字符',
-			        'cid'           => '分类必须',
-			        'author'        => '作者必须',
-			        'content'       => '内容必须',
-			        'sort'          => '排序必须为数字',
-			        'click'         => '点击量必须为数字',
-			    ]
-			)->save($data);
-
+    		$result = $article->validate('ArticleValidate')->save($data);
 			if(false === $result){
 			    // 验证失败 输出错误信息
 			    $this->error($article->getError());exit;
@@ -94,13 +75,16 @@ class Articles extends Adminbase
     	$is_show = input('post.is_show');
     	$res = Article::where('aid',input('post.aid'))->update(['is_show'=>$is_show]);
     	if($res){echo json_encode(['ok'=>'y']);exit;}
+    	//if($res){return json_encode(['ok'=>'y']);}
     }
 
     //删除文章,设为已删除状态
     public function is_delete()
     {
     	$res = Article::where('aid',input('post.aid'))->update(['is_delete'=>1]);
+    	 
     	if($res){echo json_encode(['ok'=>'y']);exit;}
+    	//if($res){return json_encode(['ok'=>'y']);}
     }
 
     //添加标签
@@ -143,6 +127,7 @@ class Articles extends Adminbase
     	$aid = input('post.aid');
     	$res = db('article')->where('aid',$aid)->update(['is_delete'=>0]);
     	if($res){echo json_encode(['ok'=>'y']);exit;}
+    	//if($res){return json_encode(['ok'=>'y']);}
     }
 
 

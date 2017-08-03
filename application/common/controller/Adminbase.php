@@ -11,8 +11,6 @@ class Adminbase extends controller{
 		if(empty(Session::get('admin_user.username'))){
 			$this->error('您还未登录，请先登录','admin/Login/login');
 		}
-
-
 		// $request = Request::instance();
 		// $module_name = $request->module();//当前操作的模型名
 		// $controller_name = $request->controller();//当前操作的控制器名
@@ -25,8 +23,6 @@ class Adminbase extends controller{
 		// if(!$result){
 		// 	$this->error('您没有权限访问', 'javascript:history.back(-1);');
 		// }
-
-
 	}
 
 	

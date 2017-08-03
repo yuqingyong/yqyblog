@@ -21,7 +21,7 @@ class Comments extends Adminbase
     }
 
 
-    //设置文章的显示状态
+    //设置评论的显示状态
     public function is_show()
     {
     	$is_show = input('post.status');

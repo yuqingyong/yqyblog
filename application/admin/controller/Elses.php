@@ -72,20 +72,7 @@ class Elses extends Adminbase
             $data['img'] = '/uploads/'.$info->getSaveName();
 
             $Images = new Images();
-            $result = $Images->validate(
-                [
-                    'mname'    => 'require',
-                    'from'     => 'require',
-                    'url'      => 'require',
-                    'end_time' => 'require',
-                ],
-                [
-                    'mname.require' => '名称必须',
-                    'end_time'      => '结束时间必须',
-                    'from'          => '来源必须',
-                    'url'           => '外链容必须',
-                ]
-            )->save($data);
+            $result = $Images->validate('ImageValidate')->save($data);
             if(false === $result){
                 // 验证失败 输出错误信息
                 $this->error($Images->getError());exit;

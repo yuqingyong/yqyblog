@@ -30,6 +30,8 @@ class Login extends Adminbase{
 						'last_login_ip'   => $gx['last_login_ip'],
 					],['id'=>$res['id']]);
 					$this->success('登录成功', 'Index/index');
+				}else{
+					$this->error('账号或者密码错误');
 				}
 			}
 			

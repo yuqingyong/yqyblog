@@ -19,7 +19,7 @@ class Article extends Model{
 			$list = db('article')
 				  ->alias('a')
 				  ->join('yqy_article_pic b','a.aid = b.aid')
-			      ->where($where)->order('a.sort desc')->field($field)->cache(true,60)->paginate($limit);
+			      ->where($where)->order('a.sort desc')->field($field)->cache(true,3600*24)->paginate($limit);
 		}elseif ($cid == 'all' && $tid != 'all') {
 			//查询该标签下的所有文章
 			if($is_show == 'all'){
@@ -32,7 +32,7 @@ class Article extends Model{
 				  ->join('yqy_article a','at.aid = a.aid')
 				  ->join('yqy_article_pic b','a.aid = b.aid')
 				  ->where($where)->order('a.sort desc')->field($field)
-				  ->cache(true,60)->paginate($limit);	
+				  ->cache(true,3600*24)->paginate($limit);	
 		}elseif ($cid!='all' && $tid=='all') {
 			//查询该分类下的所有文章
 			if($is_show == 'all'){
@@ -43,7 +43,7 @@ class Article extends Model{
 			$list = db('article')
 			      ->alias('a')
 				  ->join('yqy_article_pic b','a.aid = b.aid')
-			      ->where($where)->order('a.sort desc')->field($field)->cache(true,60)->paginate($limit);
+			      ->where($where)->order('a.sort desc')->field($field)->cache(true,3600*24)->paginate($limit);
 
 		}
 		//echo db('article')->getlastsql();die;

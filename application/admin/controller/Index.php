@@ -4,6 +4,7 @@ use app\common\controller\Adminbase;
 use think\controller;
 use think\Db;
 use think\request;
+use think\Cache;
 class Index extends Adminbase
 {
     public function index()
@@ -29,4 +30,17 @@ class Index extends Adminbase
         );
 		return view('Index/websit',['info'=>$info]);
 	}
+
+	//清除缓存
+	public function clear_cache()
+	{
+		//清除所有的缓存
+		$res = Cache::clear();
+		if($res == true){$this->success('清除缓存成功！');exit;}
+	}
+
+
+
+
+
 }
