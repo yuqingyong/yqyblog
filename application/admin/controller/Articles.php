@@ -45,6 +45,7 @@ class Articles extends Adminbase
 		      	if($resu){$this->success('添加成功','Articles/article_list');exit;}
 			}
     	}
+
     	return view('Article/add_article',['category'=>$category]);
     }
 
@@ -151,6 +152,25 @@ class Articles extends Adminbase
     	}
     	
     }
+
+
+    //百度推送
+    public function baidu_site($article_url)
+    {
+       $pushresult=pushToBaidu(array($article_url));
+       $pobj=json_decode($pushresult);//将返回的Json字符串转换成php可操作的对象
+       if($pobj.success && $pobj.success>=1)
+       {
+          $this->success('推送成功');
+       }else{
+          $this->success('推送失败');
+       }
+    }
+
+
+
+
+
 
 
 
