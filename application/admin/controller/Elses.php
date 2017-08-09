@@ -11,9 +11,8 @@ class Elses extends Adminbase
 	//友情链接列表
     public function friend_url()
     {
-    	$list = Link::where(true)->order('lid desc')->field('lanem,lid,is_show,sort,url')->paginate(10);
-    	$page = $list->render();
-		return view('Elses/friend_url',['list'=>$list,'page'=>$page]);
+    	$result = model('Link')->get_link_list();
+		return view('Elses/friend_url',['list'=>$result['list'],'page'=>$result['page']]);
     }
 
     //添加友情链接
@@ -53,9 +52,8 @@ class Elses extends Adminbase
     public function img_list()
     {
         //查询图片广告列表
-        $img_list = Images::where(true)->order('mid desc')->field('mname,mid,is_show,create_time,end_time,url,img,from')->paginate(5);
-        $page = $img_list->render();
-        return view('Elses/img_list',['list'=>$img_list,'page'=>$page]);
+        $result = model('Images')->get_images_list(true,'mname,mid,is_show,create_time,end_time,url,img,from');
+        return view('Elses/img_list',['list'=>$result['list'],'page'=>$result['page']]);
     }
 
 
@@ -70,7 +68,6 @@ class Elses extends Adminbase
             $file = request()->file('img');
             $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
             $data['img'] = '/uploads/'.$info->getSaveName();
-
             $Images = new Images();
             $result = $Images->validate('ImageValidate')->save($data);
             if(false === $result){
@@ -89,20 +86,8 @@ class Elses extends Adminbase
     {
         $img = db('advert')->where('mid',input('mid'))->find();
         if($reqeust->ispost()){
-            $data = input('post.');
-            $data['create_time'] = strtotime(input('post.create_time'));
-            $data['end_time']    = strtotime(input('post.end_time'));
-            //图片上传
-            $file = request()->file('img');
-            if($file != null){
-                $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
-                $data['img'] = '/uploads/'.$info->getSaveName();
-                $res = Images::where('mid',input('post.mid'))->field('img,mname,mid,create_time,end_time,from,url')->update($data);
-                if($res > 0){$this->success('更新成功');exit;}
-            }else{
-                $res = Images::where('mid',input('post.mid'))->field('mname,mid,create_time,end_time,from,url')->update($data);
-                if($res > 0){$this->success('更新成功');exit;}
-            }
+            $res = model('Images')->edit_images();
+            if($res == true){$this->success('更新成功');exit;}
         }
         return view('Elses/edit_img',['img'=>$img]);
     }

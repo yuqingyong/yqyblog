@@ -7,13 +7,20 @@ use think\Db;
 use think\request;
 class Articles extends Adminbase
 {
+	private $db;
+	// 构造函数 实例化ArticleModel表
+    public function __construct(){
+        parent::__construct();
+        $this->db = model('Article');
+    }
+
 	//文章列表
     public function article_list()
     {
     	//读取已有的标签
     	$tags = db('tags')->field('tid,tname')->select();
-    	$article = new Article();
-    	$res = $article->getPageData('all','all','all');
+    	//$article = new Article();
+    	$res = $this->db->getPageData('all','all','all');
 		return view('Article/article_list',['list'=>$res['list'],'page'=>$res['page'],'tags'=>$tags]);
     }
 
@@ -21,28 +28,20 @@ class Articles extends Adminbase
     public function add_article(Request $request)
     {
     	//读取文章分类
-    	$category = db('category')->field('cname,cid')->select();
+    	$category = $this->db->getArticleCat();
     	if($request->ispost())
     	{
     		$data = input('post.');
     		$data['create_time'] = time();
-    		$article = new Article();
-    		$result = $article->validate('ArticleValidate')->save($data);
+    		//$article = new Article();
+    		$result = $this->db->validate('ArticleValidate')->save($data);
 			if(false === $result){
 			    // 验证失败 输出错误信息
-			    $this->error($article->getError());exit;
+			    $this->error($this->db->getError());exit;
 			}else{
 				//如果添加成功则获取文章的封面图
-				$aid = db('article')->order('aid desc')->field('aid')->find();
-		        $info= getpic(input('post.content'));
-		        //生成缩略图
-		        $image = \think\Image::open('.'.$info);
-				$image->thumb(220, 150)->save("./upload/".$aid['aid']."thumb.png");
-				$p['path']= "/upload/".$aid['aid']."thumb.png";
-				$p['aid'] = $aid['aid'];
-		      	//将得到的图片路径添加至图片表
-		      	$resu = db('article_pic')->insert($p);
-		      	if($resu){$this->success('添加成功','Articles/article_list');exit;}
+				$ress = $this->db->add_article_pic();
+		      	if($ress == true){$this->success('添加成功','Articles/article_list');exit;}
 			}
     	}
 
@@ -53,19 +52,14 @@ class Articles extends Adminbase
     public function edit_article(Request $request)
     {
     	//查询详细信息
-    	$article = db('article')
-                 ->alias('a')
-                 ->join('yqy_category b','a.cid = b.cid')
-    	         ->where('aid',input('aid'))
-    	         ->field('aid,title,a.cid,content,author,a.keywords,a.is_show,a.is_delete,sort,click,description,b.cname')->find();
+    	$article = model('Article')->getDataByAid();
     	//读取文章分类
-    	$category = db('category')->field('cname,cid')->select();
+    	$category = model('Article')->getArticleCat();
+
     	if($request->ispost())
     	{
-    		$data = input('post.');
-    		$article = new Article();
-    		$result = $article->where('aid',input('post.aid'))->update($data);
-	      	if($result){$this->success('修改成功','Articles/article_list');exit;}
+    		$result = model('Article')->edit_article();;
+	      	if($result == true){$this->success('修改成功','Articles/article_list');exit;}
     	}
     	return view('Article/edit_article',['category'=>$category,'info'=>$article]);
     }
@@ -136,21 +130,10 @@ class Articles extends Adminbase
     //彻底删除文章
     public function c_del()
     {
-    	$aid = input('post.aid');
-    	//查询是否存在此文章
-    	$article = db('article')->where('aid',$aid)->field('aid')->find();
-    	//查询图片路径
-    	$path    = db('article_pic')->where('aid',$aid)->field('path')->find();
-    	if($article)
+    	if(model('article')->del_all() == true)
     	{
-    		//如果存在则删除该条数据，并且删除图片的源文件
-    		$res = db('article')->where('aid',$aid)->delete();
-    		db('article_pic')->where('aid',$aid)->delete();
-    		db('article_tag')->where('aid',$aid)->delete();
-    		unlink('.'.$path['path']);
     		echo json_encode(['ok'=>'y']);exit;
     	}
-    	
     }
 
 
