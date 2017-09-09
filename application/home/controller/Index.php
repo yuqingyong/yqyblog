@@ -59,8 +59,6 @@ class Index extends Homebase
     		return view('Index/article_search',['list'=>$article,'word'=>$word,'tags'=>$tags]);
     	}
     	
-    	
-    	
     }
 
 	//注册会员
@@ -94,7 +92,6 @@ class Index extends Homebase
 			$remember = input('post.remember');
 			$username = input('post.username');
 			$password = md5(input('post.password'));
-
 			if(!captcha_check(input('post.code'))){
 				$this->error('验证码错误');exit;
 			}else{

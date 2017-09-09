@@ -3,8 +3,8 @@
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>随心语录</title>
-	<meta name="keywords" content="随心语录">
-	<meta name="description" content="随心语录">
+	<meta name="keywords" content="星辰网络博客，星辰，星辰网络，星辰博客，博客，PHP，thinkphp">
+    <meta name="description" content="一个个人的博客网站，有PHP，thinkphp，Linux等相关学习资料">
 	<meta http-equiv="Cache-Control" content="no-siteapp">
 	<meta name="author" content="www.myweb.cn">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -31,12 +31,12 @@
     <div class="container">
       <div class="header-topbar hidden-xs link-border">
         <ul class="site-nav topmenu">
-          <if condition="$Think.session.users.user_id != ''">
+            {if condition="$Think.session.users.user_id != ''"}
         		<li><a href="#}">欢迎您:{$Think.session.users.username}</a></li>
         		<li><a href="{:url('home/Index/login_out')}">退出</a></li>
-        	<else/>
+        	{else/}
           		<li><a href="{:url('home/Index/login')}">登录</a></li>
-          	</if>
+          	{/if}
             <li><a href="{:url('home/Index/register')}" rel="nofollow" >注册</a></li>
             <li><a onclick="login()" title="第三方登录" >
                 <i class="fa fa-rss">

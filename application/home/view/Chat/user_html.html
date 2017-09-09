@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>用户聊天界面</title>
+</head>
+<script type="text/javascript" src="__PUBLIC__/home/js/jquery-1.10.2.js"></script>
+<style>
+	body{font-size: 16px;color: #000;font-family: "微软雅黑";}
+	.body{width: 960px;height: 100%;margin: 0 auto;padding-left:20%;padding-top: 5%;}
+	.content{width: 560px;height: 350px;float: left; border: 1px solid #ccc;}
+	.shuru{width: 560px;height: 80px;background: yellow;float: left;margin-top: 20px;}
+	.send_msg{width: 560px;height: 35px;border-color: none;background: #3399CC;color: #fff;margin-top: 10px;}
+	.top{width: 960px;height: 50px;margin: 0 auto;text-align: center;font-size: 18px;}
+</style>
+<script>
+$(function(){
+	//向数据库请求查询是否存在
+	$(".send_msg").click(function(){
+		var content = $("#user_msg").val();
+		if(content == ''){
+			alert('请输入内容');
+		}
+		//用户发送到客服
+		$.post("{:url('home/User/user_send_msg')}",{'content':content},function(msg){
+			var obj = JSON.parse(msg);
+			$(".content").append(obj.user_name+":"+obj.content+'\n');
+			$("#user_msg").val('');
+		});
+	});
+	
+	//用ajax轮询的方式从数据库获取客服是否有发送新的消息
+	var setting = {
+		"url":"{:url('home/User/user_server')}",
+		"dataType":'json',
+		success:function(res){
+			var content = eval(res);
+			$(".content").append(content.user_name+":"+content.content+'\n');
+			$.ajax(setting);
+		}
+	}
+	$.ajax(setting);
+
+
+
+
+})
+</script>
+<body>
+<div class="body">
+	<div class="top">用户聊天界面</div>
+	<textarea class="content"></textarea>
+	<div class="shuru">
+		<textarea id="user_msg" style="width:555px;height:80px;" name="content"></textarea>
+	</div>
+	<button class="send_msg">发送</button>
+</div>
+</body>
+</html>
