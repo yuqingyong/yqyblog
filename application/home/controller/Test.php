@@ -3,9 +3,29 @@ namespace app\home\controller;
 use app\common\controller\Homebase;
 use think\request;
 use think\Controller;
-use think\Db;
+use think\DB;
+use think\Cookie;
+use think\Wechat;
 class Test extends Homebase
 {
+
+	//数据信息获取页面测试
+	public function get_weixin_msg()
+	{
+		$data   = Cookie::get('user_info');
+		$openid = Cookie::get('openid');
+		dump($openid);
+		dump($data);die;
+	}
+
+	//清除缓存操作
+	public function clear_cache()
+	{
+		Cookie::delete('user_info');
+		Cookie::delete('openid');
+		echo "Is ok";die;
+	}
+
 	//crontab 定时任务测试
 	public function add_tag()
 	{
@@ -53,16 +73,62 @@ class Test extends Homebase
 		$res = $Sendwxmsg->doSend($touser, $template_id, $url, $data);
 		dump($res);die;
 
+	}
 
+	//微信获取用户信息测试
+	public function get_weixin_userinfo()
+	{
+		if(Cookie::has('openid')){
+			$openid = Cookie::get('openid');
+			//如果存在openid的缓存则不需要再次请求接口，说明user_info还没有过期，则查询是否存在
+			$res = DB::table('yqy_weixin_user')->where('openid',$openid)->field('uid')->find();
+			//如果存在则直接重定向首页，否则重定向至get_weixin_userinfo方法
+			if($res){
+				$this->redirect('/');	
+			}else{
+				$this->redirect(url('home/Test/get_weixin_userinfo'));
+			}
+		}else{
+			//实例化WeChat类
+			$weixin = new Wechat();
 
+			//获取用户的基本信息
+			$user_info = $weixin->_userInfoAuth('http://www.yuqingyong.cn/home/Test/get_weixin_userinfo');
+			/**
+			 * 获取到用户的openid,access_token之后，取出openid
+			 * 判断用户的openid是否存在于数据库中
+			 * 如果存在于数据库中，则直接session用户信息并跳转首页
+			 * 否则将用户信息存储并跳转首页
+			 */
+			$this->is_openid($user_info['openid'],$user_info);
+		}
 	}
 
 
-
-
-
-
-
+	//判断是否存在openid用户并处理
+	public function is_openid($openid,$user_info)
+	{
+		$res = DB::table('yqy_weixin_user')->where('openid',$openid)->field('uid')->find();
+		if(!empty($res)){
+			//如果查询存在数据,则Cookie缓存查询到的数据
+			Cookie::set('user_info',$user_info,86400*7);
+			//重定向至首页
+			$this->redirect('/');
+		}else{
+			//否则获取用户信息并将新用户添加入数据库中
+			if ($user_info) {
+				//如果存在则添加
+				$data['openid'] = $user_info['openid'];
+				$data['create_time'] = time();
+				$data['update_time'] = time();
+				$ress = DB::table('yqy_weixin_user')->insert($data);
+				//Cookie缓存获取到的数据
+				Cookie::set('user_info',$user_info,86400*7);
+				//重定向至首页
+				$this->redirect('/');
+			}
+		}
+	}
 
 
 
