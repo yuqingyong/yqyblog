@@ -1,7 +1,7 @@
 <?php
 namespace app\home\controller;
 use app\common\controller\Homebase;
-use app\common\model\Demand;
+use app\common\model\DemandModel;
 use think\request;
 use think\Session;
 use think\Controller;
@@ -19,7 +19,7 @@ class Release extends Homebase
   //需求列表
   public function index()
   {
-  	$demand = new Demand();
+  	$demand = new DemandModel();
   	$data   = $demand->get_demand_page('1','type,xid,create_time,see_num,comment_num,content,title',10);
   	return view('Release/index',['list'=>$data['list'],'page'=>$data['page']]);
   }	
@@ -28,14 +28,14 @@ class Release extends Homebase
   public function fabu(Request $request)
   {
   	$this->view->engine->layout(false);
-  	$demand = new Demand();
+  	$demand = new DemandModel();
   	$data   = $demand->get_demand_page('1','xid,create_time,title',6);
   	if($request->ispost()){
   		if(Session::has('users')){
-  		$data['title'] = input('post.title');
-  		$data['type']  = input('post.type');
-  		$data['content']   = input('post.content','','');
-  		$data['__token__'] = input('post.__token__');
+  		$data['title'] = $requst->post('title');
+  		$data['type']  = $requst->post('type');
+  		$data['content']   = $requst->post('content','','');
+  		$data['__token__'] = $requst->post('__token__');
 		$validate = Loader::validate('Demand');
 		if(!$validate->check($data)){
 		    $this->error($validate->getError());die;
@@ -45,7 +45,6 @@ class Release extends Homebase
 			$data['user_id']     = Session::get('users.uid');
 			$data['user_name']   = Session::get('users.username');
 			$res = $demand->allowField(true)->save($data);
-			//if($res){$this->success('提交成功');exit;}
 		}
 	    }else{
 	    	$this->error('您还未登录，请先登录','home/Index/login');exit;
@@ -62,7 +61,7 @@ class Release extends Homebase
   	$xid = input('xid');
   	$this->see_num($xid);
 	//查询详情
-	$detail = db('demand')->where('xid',$xid)->find();
+	$detail = Db::name('demand')->where('xid',$xid)->find();
   	return view('Release/demand_detail',['art_detail'=>$detail]);
   }
 
@@ -70,7 +69,7 @@ class Release extends Homebase
   //点击量增加
   public function see_num($xid)
   {
-  	db('demand')->where('xid',$xid)->field('see_num')->setInc('see_num');
+  	Db::name('demand')->where('xid',$xid)->field('see_num')->setInc('see_num');
   }
 
 

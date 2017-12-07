@@ -1,16 +1,16 @@
 <?php
 namespace app\admin\controller;
 use app\common\controller\Adminbase;
-use app\common\model\Demand;
+use app\common\model\DemandModel;
 use think\controller;
 use think\Db;
 use think\request;
-class Demands extends Adminbase
+class Demand extends Adminbase
 {
 	//需求列表
 	public function demand_list()
 	{
-		$demand = new Demand();
+		$demand = new DemandModel();
   		$data   = $demand->get_demand_page('all','type,xid,create_time,user_name,see_num,title,is_show',10);
 		return view('Demand/demand_list',['list'=>$data['list'],'page'=>$data['page']]);
 	}
@@ -19,7 +19,7 @@ class Demands extends Adminbase
     public function is_show()
     {
     	$is_show = input('post.is_show');
-    	$res = Demand::where('xid',input('post.xid'))->update(['is_show'=>$is_show]);
+    	$res = DemandModel::where('xid',input('post.xid'))->update(['is_show'=>$is_show]);
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 
@@ -27,7 +27,7 @@ class Demands extends Adminbase
     public function delete()
     {
     	$xid = input('post.xid');
-    	$res = db('demand')->where('xid',$xid)->delete();
+    	$res = Db::name('demand')->where('xid',$xid)->delete();
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 

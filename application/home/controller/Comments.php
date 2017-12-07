@@ -19,17 +19,17 @@ class Comments extends Homebase
   	{
     	//判断用户是否登录
     	if(Session::has('users')){
-    	  $data = input('post.');
+    	  $data = $request->post();
     	  $data['uid'] = Session::get('users.uid');
     	  $data['date']= time();
-    	  $res = db('Comment')->insert($data);
+    	  $res = Db::name('Comment')->insert($data);
     	  if($res){
-      	  //如果已经评论成功，则增加该文章的评论次数
-      	  db('article')->where('aid',$data['aid'])->field('comment_num')->setInc('comment_num');
-      	  echo json_encode(['ok'=>'y']);exit;
-    	   }
+	      	  //如果已经评论成功，则增加该文章的评论次数
+	      	  Db::name('article')->where('aid',$data['aid'])->field('comment_num')->setInc('comment_num');
+	      	  return json_encode(['ok'=>'y']);exit;
+    	  }
 	    }else{
-	      echo json_encode(['ok'=>'n']);exit;
+	      	  return json_encode(['ok'=>'n']);exit;
 	    }
     } 
 

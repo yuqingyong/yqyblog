@@ -39,12 +39,12 @@
  }
 </style>
 <body>
-<form method="post" action="{:url('admin/Articles/a_search')}" id="listform">
+<form method="post" action="{:url('admin/Article/a_search')}" id="listform">
    <div class="panel admin-panel">
     <div class="panel-head"><strong class="icon-reorder"> 文章列表</strong></div>
     <div class="padding border-bottom">
       <ul class="search" style="padding-left:10px;">
-        <li> <a class="button border-main icon-plus-square-o" href="{:url('admin/Articles/add_article')}"> 添加文章</a> </li>
+        <li> <a class="button border-main icon-plus-square-o" href="{:url('admin/Article/add_article')}"> 添加文章</a> </li>
         <li>搜索：</li>
         <li>
           <input type="text" placeholder="请输入搜索关键字" name="keyword" class="input" style="width:250px; line-height:17px;display:inline-block" />
@@ -102,7 +102,7 @@ function c_del(aid){
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/Articles/c_del')}",
+			url:"{:url('admin/Article/c_del')}",
 			data:{'aid':aid},
 			success:function(msg){
 				var _json = JSON.parse(msg);
@@ -129,7 +129,7 @@ function huifu(aid)
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/Articles/a_huifu')}",
+			url:"{:url('admin/Article/a_huifu')}",
 			data:{'aid':aid},
 			success:function(msg){
 				var _json = JSON.parse(msg);

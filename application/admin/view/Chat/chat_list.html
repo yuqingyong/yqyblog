@@ -13,12 +13,12 @@
 <script src="__PUBLIC__/admin/js/layer.js"></script>
 </head>
 <body>
-<form method="post" action="{:url('admin/Chats/chat_list')}" id="listform">
+<form method="post" action="{:url('admin/Chat/chat_list')}" id="listform">
    <div class="panel admin-panel">
     <div class="panel-head"><strong class="icon-reorder"> 随言列表</strong></div>
     <div class="padding border-bottom">
       <ul class="search" style="padding-left:10px;">
-        <li> <a class="button border-main icon-plus-square-o" href="{:url('admin/Chats/add_chat')}"> 添加随言</a> </li>
+        <li> <a class="button border-main icon-plus-square-o" href="{:url('admin/Chat/add_chat')}"> 添加随言</a> </li>
         <li>搜索：</li>
         <li>
           <input type="text" placeholder="请输入搜索关键字" name="keyword" class="input" style="width:250px; line-height:17px;display:inline-block" />
@@ -52,7 +52,7 @@
           		{else/}
           		<a class="button border-main" href="javascript:void(0)" onclick="return is_show({$va.chid},0)"><span class="icon-edit"></span> 禁用</a>
           		{/if}
-          		<a class="button border-main" href="{:url('admin/Chats/edit_chat',array('chid'=>$va['chid']))}"><span class="icon-edit"></span> 修改</a>
+          		<a class="button border-main" href="{:url('admin/Chat/edit_chat',array('chid'=>$va['chid']))}"><span class="icon-edit"></span> 修改</a>
           		<a class="button border-red" href="javascript:void(0)" onclick="return del({$va.chid})"><span class="icon-trash-o"></span> 删除</a> 
           	</div>
           </td>
@@ -73,7 +73,7 @@ function del(chid){
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/Chats/del')}",
+			url:"{:url('admin/Chat/del')}",
 			data:{'chid':chid},
 			success:function(msg){
 				var _json = JSON.parse(msg);
@@ -100,7 +100,7 @@ function is_show(chid,is_show)
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/Chats/is_show')}",
+			url:"{:url('admin/Chat/is_show')}",
 			data:{'chid':chid,'is_show':is_show},
 			success:function(msg){
 				var _json = JSON.parse(msg);

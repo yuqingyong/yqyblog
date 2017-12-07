@@ -48,6 +48,24 @@ class Users extends Model{
 	}
 
 
+	//用户注册
+	public function user_register()
+	{
+		$data['username'] = input('post.username');
+		$data['password'] = md5(input('post.password'));
+		$data['email'] 	  = input('post.email');
+		$data['type']     = 1;
+		$res = $this->insert($data);
+		return $res;
+	}
+
+
+
+
+
+
+
+
 
 
 }

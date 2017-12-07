@@ -1,7 +1,6 @@
 <?php
 namespace app\home\controller;
 use app\common\controller\Homebase;
-use app\admin\model\Article;
 use think\request;
 use think\Controller;
 use think\Db;
@@ -17,9 +16,9 @@ class Chat extends Homebase
    {
    	 $this->view->engine->layout(false);
    	 //闲言碎语列表
-   	 $chat = db('chat')->where('is_show',1)->order('chid desc')->select();
+   	 $chat = Db::name('chat')->where('is_show',1)->order('chid desc')->select();
    	 //标签列表
-     $tags = db('tags')->order('tid desc')->select();
+     $tags = Db::name('tags')->order('tid desc')->select();
      return view('Chat/chat',['chat'=>$chat,'tags'=>$tags]);
    } 
 
@@ -28,15 +27,15 @@ class Chat extends Homebase
    {
    	 $this->view->engine->layout(false);
    	 //查询留言数据
-   	 $message = db('message')->where('is_show',1)->order('id desc')->select();
+   	 $message = Db::name('message')->where('is_show',1)->order('id desc')->select();
    	 if($request->ispost())
    	 {
-   	 	if(!empty(input('post.content')))
+   	 	if(!empty($request->post('content')))
    	 	{
-   	 		$data['content'] = input('post.content','','htmlentities');
-	   	 	$data['nickname']= input('post.nickname') ? input('post.nickname') : '游客';
+   	 		$data['content'] = $request->post('content','','htmlentities');
+	   	 	$data['nickname']= $request->post('nickname') ? $request->post('nickname') : '游客';
 	   	 	$data['create_time'] = time();
-	   	 	$res = db('message')->insert($data);
+	   	 	$res = Db::name('message')->insert($data);
 	   	 	if($res){$this->success('提交成功...');exit;}
    	 	}else{$this->error('亲，请输入想说的话！');exit;}
    	 	

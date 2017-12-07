@@ -13,9 +13,8 @@
 <script src="__PUBLIC__/admin/js/layer.js"></script>
 </head>
 <body>
-<form method="post" action="{:url('admin/Chats/chat_list')}" id="listform">
+<form method="post" id="listform">
    <div class="panel admin-panel">
-    <div class="panel-head"><strong class="icon-reorder"> 评论列表</strong></div>
 
     <div class="panel-head"><strong class="icon-reorder"> 评论列表</strong></div>
     
@@ -67,7 +66,7 @@ function del(cmtid){
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/Comments/del')}",
+			url:"{:url('admin/Comment/del')}",
 			data:{'cmtid':cmtid},
 			success:function(msg){
 				var _json = JSON.parse(msg);
@@ -94,7 +93,7 @@ function is_show(cmtid,status)
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/Comments/is_show')}",
+			url:"{:url('admin/Comment/is_show')}",
 			data:{'cmtid':cmtid,'status':status},
 			success:function(msg){
 				var _json = JSON.parse(msg);

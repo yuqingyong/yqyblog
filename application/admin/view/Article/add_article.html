@@ -17,6 +17,15 @@
     KindEditor.ready(function(K) {
             window.editor = K.create('#editor_id');
     });
+    
+    //代码高亮
+    var KE;
+	KindEditor.ready(function(K) {
+	    KE = K.create('#content',{
+	        designMode : false
+	    });
+	});
+    
     var options = {
             cssPath : '/css/index.css',
             filterMode : true
@@ -44,7 +53,7 @@
 <div class="panel admin-panel">
   <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>添加文章</strong></div>
   <div class="body-content">
-    <form method="post" class="form-x" action="{:url('admin/Articles/add_article')}" enctype="multipart/form-data">  
+    <form method="post" class="form-x" action="{:url('admin/Article/add_article')}" enctype="multipart/form-data">  
       <div class="form-group">
         <div class="label">
           <label>标题：</label>

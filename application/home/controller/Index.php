@@ -2,7 +2,7 @@
 namespace app\home\controller;
 use app\common\controller\Homebase;
 use app\common\model\Users;
-use app\admin\model\Article;
+use app\common\model\ArticleModel;
 use think\request;
 use think\Controller;
 use think\Db;
@@ -19,13 +19,13 @@ class Index extends Homebase
     public function index()
     {
     	//友情链接
-    	$link = db('link')->where('is_show',1)->order('sort desc')->cache('link',60)->select();
+    	$link = Db::name('link')->where('is_show',1)->order('sort desc')->cache('link',3600)->select();
 
     	//查询首页轮播图
-    	$banner = db('advert')->where(['type'=>1,'is_show'=>1])->field('mid,mname,img,url')->cache('banner',60)->select();
+    	$banner = Db::name('advert')->where(['type'=>1,'is_show'=>1])->field('mid,mname,img,url')->cache('banner',3600)->select();
     	
     	//读取最新发布的文章
-		$article = new Article();
+		$article = new ArticleModel();
     	$res = $article->getPageData('all','all','1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');
     	
         return view('Index/index',[
@@ -40,7 +40,7 @@ class Index extends Homebase
     public function article_search(Request $request)
     {
     	//标签列表
-    	$tags = db('tags')->order('tid desc')->select();
+    	$tags = Db::name('tags')->order('tid desc')->select();
     	$tag  = input('tid');
     	$word = input('word','','htmlentities');
     	if(!empty($tag) && empty($word)){
@@ -51,7 +51,7 @@ class Index extends Homebase
     	}else{
     		//关键词查询
     		$where['title'] = ['like',"%".$word."%"];
-    		$article = db('article')
+    		$article = Db::name('article')
     			 ->alias('a')
     			 ->join('yqy_article_pic b','a.aid = b.aid')
     			 ->where($where)->order('a.aid desc')
@@ -70,11 +70,7 @@ class Index extends Homebase
 			if(!captcha_check(input('post.code'))){
 				$this->error('验证码错误');exit;
 			}else{
-				$data['username'] = input('post.username');
-				$data['password'] = md5(input('post.password'));
-				$data['email'] 	  = input('post.email');
-				$data['type']     = 1;
-				$res = db('users')->insert($data);
+				$res = model('Users')->user_register();
 				if($res){$this->success('注册成功，前往登录...','home/Index/login');exit;}
 			}
 			
@@ -89,10 +85,10 @@ class Index extends Homebase
 		$this->view->engine->layout(false); 
 		if($request->ispost())
 		{
-			$remember = input('post.remember');
-			$username = input('post.username');
-			$password = md5(input('post.password'));
-			if(!captcha_check(input('post.code'))){
+			$remember = $request->post('remember');
+			$username = $request->post('username');
+			$password = md5($request->post('password'));
+			if(!captcha_check($request->post('code'))){
 				$this->error('验证码错误');exit;
 			}else{
 				//验证用户账号密码
@@ -130,7 +126,7 @@ class Index extends Homebase
 	public function check_username()
 	{
 		$username = input('post.username');
-		$res = db('users')->where('username',$username)->field('uid')->find();
+		$res = Db::name('users')->where('username',$username)->field('uid')->find();
 		if($res){echo json_encode(['ok'=>'n']); exit;}else{echo json_encode(['ok'=>'y']); exit;}
 	}
 

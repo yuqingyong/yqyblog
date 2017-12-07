@@ -39,12 +39,12 @@
  }
 </style>
 <body>
-<form method="post" action="{:url('admin/Articles/a_search')}" id="listform">
+<form method="post" action="{:url('admin/Article/a_search')}" id="listform">
    <div class="panel admin-panel">
     <div class="panel-head"><strong class="icon-reorder"> 文章列表</strong></div>
     <div class="padding border-bottom">
       <ul class="search" style="padding-left:10px;">
-        <li> <a class="button border-main icon-plus-square-o" href="{:url('admin/Articles/add_article')}"> 添加文章</a> </li>
+        <li> <a class="button border-main icon-plus-square-o" href="{:url('admin/Article/add_article')}"> 添加文章</a> </li>
         <li>搜索：</li>
         <li>
           <input type="text" placeholder="请输入搜索关键字" name="keyword" class="input" style="width:250px; line-height:17px;display:inline-block" />
@@ -80,14 +80,14 @@
 		    {case value="0"}<td style="color: red;" onclick="is_set({$va.aid},'best',1)">否</td>{/case}
 		  {/switch}
           <td>
-          	<div class="button-group"> 
+          	<div class="button-group">
           		<a class="button border-main" href="javascript:void(0)" onclick="return tag_select({$va.aid})"><span class="icon-edit"></span> 添加标签</a>
           		{if condition="$va.is_show eq 0"}
           		<a class="button border-main" href="javascript:void(0)" onclick="return is_show({$va.aid},1)"><span class="icon-edit"></span> 启用</a>
           		{else/}
           		<a class="button border-main" href="javascript:void(0)" onclick="return is_show({$va.aid},0)"><span class="icon-edit"></span> 禁用</a>
           		{/if}
-          		<a class="button border-main" href="{:url('admin/Articles/edit_article',array('aid'=>$va['aid']))}"><span class="icon-edit"></span> 修改</a>
+          		<a class="button border-main" href="{:url('admin/Article/edit_article',array('aid'=>$va['aid']))}"><span class="icon-edit"></span> 修改</a>
           		<a class="button border-red" href="javascript:void(0)" onclick="return del({$va.aid})"><span class="icon-trash-o"></span> 删除</a> 
           	</div>
           </td>
@@ -108,7 +108,7 @@ function del(aid){
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/Articles/is_delete')}",
+			url:"{:url('admin/Article/is_delete')}",
 			data:{'aid':aid},
 			success:function(msg){
 				var _json = JSON.parse(msg);
@@ -135,7 +135,7 @@ function is_show(aid,is_show)
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/Articles/is_show')}",
+			url:"{:url('admin/Article/is_show')}",
 			data:{'aid':aid,'is_show':is_show},
 			success:function(msg){
 				var _json = JSON.parse(msg);
@@ -165,7 +165,7 @@ function tag_select(aid)
 	  type: 1,
 	  skin: 'layui-layer-rim', //加上边框
 	  area: ['450px', '300px'], //宽高
-	  content: "<form action='{:url('admin/Articles/add_tag')}' method='post'><div id='content' class='content'></div></form>"
+	  content: "<form action='{:url('admin/Article/add_tag')}' method='post'><div id='content' class='content'></div></form>"
 	});
 	var str = '';
 	for (var i = 0,c=arr.length; i < c; i++) {

@@ -4,6 +4,7 @@ use think\Request;
 use think\Session;
 use think\Cookie;
 use think\Controller;
+use think\Wechat;
 class Homebase extends controller{
 	
 	public function _initialize()
