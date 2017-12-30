@@ -1,11 +1,11 @@
 <?php
 namespace app\admin\controller;
-use app\common\controller\Adminbase;
+use app\common\controller\AdminBase;
 use app\common\model\DemandModel;
 use think\controller;
 use think\Db;
 use think\request;
-class Demand extends Adminbase
+class Demand extends AdminBase
 {
 	//需求列表
 	public function demand_list()
@@ -18,7 +18,7 @@ class Demand extends Adminbase
 	//设置文章的显示状态
     public function is_show()
     {
-    	$is_show = input('post.is_show');
+    	$is_show = $this->request->post('is_show');
     	$res = DemandModel::where('xid',input('post.xid'))->update(['is_show'=>$is_show]);
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
@@ -26,7 +26,7 @@ class Demand extends Adminbase
     //删除需求
     public function delete()
     {
-    	$xid = input('post.xid');
+    	$xid = $this->request->post('xid');
     	$res = Db::name('demand')->where('xid',$xid)->delete();
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }

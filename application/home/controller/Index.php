@@ -1,6 +1,6 @@
 <?php
 namespace app\home\controller;
-use app\common\controller\Homebase;
+use app\common\controller\HomeBase;
 use app\common\model\Users;
 use app\common\model\ArticleModel;
 use think\request;
@@ -8,7 +8,7 @@ use think\Controller;
 use think\Db;
 use think\Session;
 use think\Cookie;
-class Index extends Homebase
+class Index extends HomeBase
 {
 	public function _empty()
 	{
@@ -41,8 +41,8 @@ class Index extends Homebase
     {
     	//标签列表
     	$tags = Db::name('tags')->order('tid desc')->select();
-    	$tag  = input('tid');
-    	$word = input('word','','htmlentities');
+    	$tag  = $this->request->param('tid');
+    	$word = $this->request->param('word','','htmlentities');
     	if(!empty($tag) && empty($word)){
     		//标签查询
     		$model = new Article();
@@ -70,10 +70,17 @@ class Index extends Homebase
 			if(!captcha_check(input('post.code'))){
 				$this->error('验证码错误');exit;
 			}else{
-				$res = model('Users')->user_register();
-				if($res){$this->success('注册成功，前往登录...','home/Index/login');exit;}
+
+				$data = $this->request->post();
+				#数据验证
+				$result = $this->validate($data,'UserValidate');
+				if(true !== $result){
+					$this->error($result);
+				}else{
+					$res = model('Users')->user_register($data);
+					if($res){$this->success('注册成功，前往登录...','home/Index/login');exit;}
+				}
 			}
-			
 		}
 		return view('Index/register');
 	}

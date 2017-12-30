@@ -135,7 +135,7 @@ class Url
         if (!empty($vars)) {
             // 添加参数
             if (Config::get('url_common_param')) {
-                $vars = urldecode(http_build_query($vars));
+                $vars = http_build_query($vars);
                 $url .= $suffix . '?' . $vars . $anchor;
             } else {
                 $paramType = Config::get('url_param_type');
@@ -272,7 +272,12 @@ class Url
                 $domain .= '.' . $rootDomain;
             }
         }
-        return ($request->isSsl() || Config::get('is_https') ? 'https://' : 'http://') . $domain;
+        if (false !== strpos($domain, '://')) {
+            $scheme = '';
+        } else {
+            $scheme = $request->isSsl() || Config::get('is_https') ? 'https://' : 'http://';
+        }
+        return $scheme . $domain;
     }
 
     // 解析URL后缀
@@ -295,9 +300,10 @@ class Url
             if (empty($pattern)) {
                 return [$url, $domain, $suffix];
             }
+            $type = Config::get('url_common_param');
             foreach ($pattern as $key => $val) {
                 if (isset($vars[$key])) {
-                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], urlencode($vars[$key]), $url);
+                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], $type ? $vars[$key] : urlencode($vars[$key]), $url);
                     unset($vars[$key]);
                     $result = [$url, $domain, $suffix];
                 } elseif (2 == $val) {

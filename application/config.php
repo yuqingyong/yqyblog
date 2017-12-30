@@ -14,6 +14,8 @@ return [
     // | 应用设置
     // +----------------------------------------------------------------------
 
+    // 应用命名空间
+    'app_namespace'          => 'app',
     // 应用调试模式
     'app_debug'              => true,
     // 应用Trace
@@ -112,6 +114,8 @@ return [
     'request_cache'          => false,
     // 请求缓存有效期
     'request_cache_expire'   => null,
+    // 全局请求缓存排除规则
+    'request_cache_except'   => [],
 
     // +----------------------------------------------------------------------
     // | 模板设置
@@ -174,7 +178,6 @@ return [
     // +----------------------------------------------------------------------
     'trace'                  => [
         // 内置Html Console 支持扩展
-
         'type' => 'Html',
     ],
 
@@ -184,7 +187,7 @@ return [
 
     'cache'                  => [
         // 驱动方式
-        'type'   => 'memcache',
+        'type'   => 'File',
         // 缓存保存目录
         'path'   => CACHE_PATH,
         // 缓存前缀
@@ -228,13 +231,6 @@ return [
         // 是否使用 setcookie
         'setcookie' => true,
     ],
-
-    //分页配置
-    'paginate'               => [
-        'type'      => 'bootstrap',
-        'var_page'  => 'page',
-        'list_rows' => 15,
-    ],
     'captcha'  => [
             // 验证码字符集合
             'codeSet'  => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY', 
@@ -250,6 +246,12 @@ return [
             'length'   => 4, 
             // 验证成功后是否重置        
             'reset'    => true
+    ],
+    //分页配置
+    'paginate'               => [
+        'type'      => 'bootstrap',
+        'var_page'  => 'page',
+        'list_rows' => 15,
     ],
     'view_replace_str' =>  [
         '__PUBLIC__'=>'/static',

@@ -1,18 +1,22 @@
 <?php
 namespace app\admin\controller;
-use app\common\controller\Adminbase;
-use think\controller;
-use think\Db;
-use think\request;
+use app\common\controller\AdminBase;
 use think\Cache;
-class Index extends Adminbase
+/**
+ * 后台首页控制器
+ * @author yuqingyong
+ */
+class Index extends AdminBase
 {
     public function index()
-    {
-		return view('Index/index');
+    {	
+        return $this->fetch('Index/index');
     }
 
-	public function websit(){
+    /**
+     * 网站基本信息展示
+     */
+    public function websit(){
 		$info = array(
          '操作系统'=>PHP_OS,
          '运行环境'=>$_SERVER["SERVER_SOFTWARE"],
@@ -28,8 +32,9 @@ class Index extends Adminbase
          'magic_quotes_gpc'=>(1===get_magic_quotes_gpc())?'YES':'NO',
          'magic_quotes_runtime'=>(1===get_magic_quotes_runtime())?'YES':'NO',
         );
-		return view('Index/websit',['info'=>$info]);
+		return $this->fetch('Index/websit',['info'=>$info]);
 	}
+
 
 	//清除缓存
 	public function clear_cache()
@@ -38,8 +43,6 @@ class Index extends Adminbase
 		$res = Cache::clear();
 		if($res == true){$this->success('清除缓存成功！');exit;}
 	}
-
-
 
 
 

@@ -1,12 +1,12 @@
 <?php
 namespace app\home\controller;
-use app\common\controller\Homebase;
+use app\common\controller\HomeBase;
 use app\admin\model\Comment;
 use think\request;
 use think\Session;
 use think\Controller;
 use think\Db;
-class Comments extends Homebase
+class Comments extends HomeBase
 {
 	public function _empty()
 	{

@@ -10,6 +10,15 @@ class CommentModel extends Base{
 	//定义表
 	protected $table = 'yqy_comment';
 
+	//状态获取器
+	public function getStatusAttr($value)
+    {
+        $status = [0=>'禁用',1=>'正常'];
+        return $status[$value];
+    }
+
+
+
 	//读取评论列表
 	public function get_comment($aid)
 	{

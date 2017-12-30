@@ -1,12 +1,12 @@
 <?php
 namespace app\admin\controller;
-use app\common\controller\Adminbase;
+use app\common\controller\AdminBase;
 use app\admin\model\Link;
 use app\admin\model\Images;
 use think\controller;
 use think\Db;
 use think\request;
-class Elses extends Adminbase
+class Elses extends AdminBase
 {
 	//友情链接列表
     public function friend_url()
@@ -21,8 +21,8 @@ class Elses extends Adminbase
     {
     	if($request->ispost())
     	{
-    		$data = input('post.');
-    		$res = db('link')->insert($data);
+    		$data = $this->request->post();
+    		$res = Db::name('link')->insert($data);
     		if($res){$this->success('添加成功','Elses/friend_url');exit;}
     	}
     	return view('Elses/add_friend_url');
@@ -31,11 +31,11 @@ class Elses extends Adminbase
     //修改友情链接
     public function edit_friend_url(Request $request)
     {
-    	$link= db('link')->where('lid',input('lid'))->find();
+    	$link= Db::name('link')->where('lid',input('lid'))->find();
     	if($request->ispost())
     	{
-    		$data = input('post.');
-    		$res = db('link')->where('lid',input('post.lid'))->update($data);
+    		$data = $this->request->post();
+    		$res = Db::name('link')->where('lid',input('post.lid'))->update($data);
     		if($res){$this->success('修改成功','Elses/friend_url');exit;}
     	}
     	return view('Elses/edit_friend_url',['link'=>$link]);
@@ -44,7 +44,7 @@ class Elses extends Adminbase
     //删除链接
     public function del_friend_url()
     {
-    	$res = db('link')->where('lid',input('post.lid'))->delete();
+    	$res = Db::name('link')->where('lid',input('post.lid'))->delete();
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 
@@ -63,7 +63,7 @@ class Elses extends Adminbase
     public function add_img(Request $reqeust)
     {
         if($reqeust->ispost()){
-            $data = input('post.');
+            $data = $this->request->post();
             $data['create_time'] = strtotime(input('post.create_time'));
             $data['end_time']    = strtotime(input('post.end_time'));
             //图片上传
@@ -87,9 +87,9 @@ class Elses extends Adminbase
     //修改图片
     public function edit_img(Request $reqeust)
     {
-        $img = db('advert')->where('mid',input('mid'))->find();
+        $img = Db::name('advert')->where('mid',input('mid'))->find();
         if($reqeust->ispost()){
-            $data = input('post.');
+            $data = $this->request->post();
             $data['create_time'] = strtotime(input('post.create_time'));
             $data['end_time']    = strtotime(input('post.end_time'));
             //图片上传
@@ -111,7 +111,7 @@ class Elses extends Adminbase
     //设置图片的状态
     public function is_show()
     {
-        $is_show = input('post.is_show');
+        $is_show = $this->request->post('is_show');
         $res = Images::where('mid',input('post.mid'))->update(['is_show'=>$is_show]);
         if($res){echo json_encode(['ok'=>'y']);exit;}
     }

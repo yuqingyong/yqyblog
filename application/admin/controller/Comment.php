@@ -1,11 +1,11 @@
 <?php
 namespace app\admin\controller;
-use app\common\controller\Adminbase;
+use app\common\controller\AdminBase;
 use app\common\model\CommentModel;
 use think\controller;
 use think\Db;
 use think\request;
-class Comment extends Adminbase
+class Comment extends AdminBase
 {
     public function comment_list()
     {

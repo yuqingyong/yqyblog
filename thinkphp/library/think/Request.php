@@ -60,6 +60,11 @@ class Request
     protected $routeInfo = [];
 
     /**
+     * @var array 环境变量
+     */
+    protected $env;
+
+    /**
      * @var array 当前调度信息
      */
     protected $dispatch = [];
@@ -602,7 +607,7 @@ class Request
     }
 
     /**
-     * 获取获取当前请求的参数
+     * 获取当前请求的参数
      * @access public
      * @param string|array  $name 变量名
      * @param mixed         $default 默认值
@@ -639,7 +644,7 @@ class Request
     }
 
     /**
-     * 设置获取获取路由参数
+     * 设置获取路由参数
      * @access public
      * @param string|array  $name 变量名
      * @param mixed         $default 默认值
@@ -656,7 +661,7 @@ class Request
     }
 
     /**
-     * 设置获取获取GET参数
+     * 设置获取GET参数
      * @access public
      * @param string|array  $name 变量名
      * @param mixed         $default 默认值
@@ -676,7 +681,7 @@ class Request
     }
 
     /**
-     * 设置获取获取POST参数
+     * 设置获取POST参数
      * @access public
      * @param string        $name 变量名
      * @param mixed         $default 默认值
@@ -701,7 +706,7 @@ class Request
     }
 
     /**
-     * 设置获取获取PUT参数
+     * 设置获取PUT参数
      * @access public
      * @param string|array      $name 变量名
      * @param mixed             $default 默认值
@@ -727,7 +732,7 @@ class Request
     }
 
     /**
-     * 设置获取获取DELETE参数
+     * 设置获取DELETE参数
      * @access public
      * @param string|array      $name 变量名
      * @param mixed             $default 默认值
@@ -740,7 +745,7 @@ class Request
     }
 
     /**
-     * 设置获取获取PATCH参数
+     * 设置获取PATCH参数
      * @access public
      * @param string|array      $name 变量名
      * @param mixed             $default 默认值
@@ -1088,7 +1093,7 @@ class Request
     public function filterExp(&$value)
     {
         // 过滤查询特殊字符
-        if (is_string($value) && preg_match('/^(EXP|NEQ|GT|EGT|LT|ELT|OR|XOR|LIKE|NOTLIKE|NOT BETWEEN|NOTBETWEEN|BETWEEN|NOTIN|NOT IN|IN)$/i', $value)) {
+        if (is_string($value) && preg_match('/^(EXP|NEQ|GT|EGT|LT|ELT|OR|XOR|LIKE|NOTLIKE|NOT LIKE|NOT BETWEEN|NOTBETWEEN|BETWEEN|NOTIN|NOT IN|IN)$/i', $value)) {
             $value .= ' ';
         }
         // TODO 其他安全过滤
@@ -1215,6 +1220,8 @@ class Request
             return true;
         } elseif (isset($server['HTTP_X_FORWARDED_PROTO']) && 'https' == $server['HTTP_X_FORWARDED_PROTO']) {
             return true;
+        } elseif (Config::get('https_agent_name') && isset($server[Config::get('https_agent_name')])) {
+            return true;
         }
         return false;
     }
@@ -1258,7 +1265,7 @@ class Request
      * @param boolean   $adv 是否进行高级模式获取（有可能被伪装）
      * @return mixed
      */
-    public function ip($type = 0, $adv = false)
+    public function ip($type = 0, $adv = true)
     {
         $type      = $type ? 1 : 0;
         static $ip = null;
@@ -1335,6 +1342,9 @@ class Request
      */
     public function host()
     {
+        if (isset($_SERVER['HTTP_X_REAL_HOST'])) {
+            return $_SERVER['HTTP_X_REAL_HOST'];
+        }
         return $this->server('HTTP_HOST');
     }
 
@@ -1527,10 +1537,16 @@ class Request
      * @param string $key 缓存标识，支持变量规则 ，例如 item/:name/:id
      * @param mixed  $expire 缓存有效期
      * @param array  $except 缓存排除
+     * @param string $tag    缓存标签
      * @return void
      */
-    public function cache($key, $expire = null, $except = [])
+    public function cache($key, $expire = null, $except = [], $tag = null)
     {
+        if (!is_array($except)) {
+            $tag    = $except;
+            $except = [];
+        }
+
         if (false !== $key && $this->isGet() && !$this->isCheckCache) {
             // 标记请求缓存检查
             $this->isCheckCache = true;
@@ -1542,7 +1558,7 @@ class Request
                 $key = call_user_func_array($key, [$this]);
             } elseif (true === $key) {
                 foreach ($except as $rule) {
-                    if (0 === strpos($this->url(), $rule)) {
+                    if (0 === stripos($this->url(), $rule)) {
                         return;
                     }
                 }
@@ -1584,7 +1600,7 @@ class Request
                 $response               = Response::create($content)->header($header);
                 throw new \think\exception\HttpResponseException($response);
             } else {
-                $this->cache = [$key, $expire];
+                $this->cache = [$key, $expire, $tag];
             }
         }
     }
@@ -1602,7 +1618,7 @@ class Request
     /**
      * 设置当前请求绑定的对象实例
      * @access public
-     * @param string $name 绑定的对象标识
+     * @param string|array $name 绑定的对象标识
      * @param mixed  $obj 绑定的对象实例
      * @return mixed
      */

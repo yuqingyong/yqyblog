@@ -1,11 +1,11 @@
 <?php
 namespace app\admin\controller;
-use app\common\controller\Adminbase;
+use app\common\controller\AdminBase;
 use app\common\model\ChatModel;
 use think\controller;
 use think\Db;
 use think\request;
-class Chat extends Adminbase
+class Chat extends AdminBase
 {
 	private $db;
     // 构造函数 实例化ArticleModel表
@@ -38,7 +38,7 @@ class Chat extends Adminbase
     //修改随笔
     public function edit_chat(Request $request)
     {
-    	$chid = input('chid');
+    	$chid = $this->request->param('chid');
     	$chat = ChatModel::where('chid',$chid)->field('content,chid')->find();
     	if($request->ispost())
     	{

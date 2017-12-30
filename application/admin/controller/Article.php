@@ -1,11 +1,11 @@
 <?php
 namespace app\admin\controller;
-use app\common\controller\Adminbase;
+use app\common\controller\AdminBase;
 use app\common\model\ArticleModel;
 use think\controller;
 use think\Db;
 use think\request;
-class Article extends Adminbase
+class Article extends AdminBase
 {
     private $db;
     // 构造函数 实例化ArticleModel表
@@ -42,28 +42,30 @@ class Article extends Adminbase
                 if($ress == true){$this->success('添加成功','Article/article_list');exit;}
             }
         }
-        return view('Article/add_article',['category'=>$category]);
+        return $this->fetch('Article/add_article',['category'=>$category]);
     }
 
     //修改文章
     public function edit_article(Request $request)
     {
+    	$aid = $this->request->param('aid');
         //查询详细信息
-        $article = $this->db->getDataByAid();
+        $article = $this->db->getDataByAid($aid);
         //读取文章分类
         $category = $this->db->getArticleCat();
         if($request->ispost())
         {
-            $result = $this->db->edit_article();;
+        	$data= $this->request->post();
+            $result = $this->db->edit_article($data);
             if($result == true){$this->success('修改成功','Article/article_list');exit;}
         }
-        return view('Article/edit_article',['category'=>$category,'info'=>$article]);
+        return $this->fetch('Article/edit_article',['category'=>$category,'info'=>$article]);
     }
 
     //设置文章的显示状态
     public function is_show()
     {
-        $is_show = input('post.is_show');
+        $is_show = $this->request->post('is_show');
         $ziduan  = ['is_show'=>$is_show];
         $res = $this->db->edit_ziduan(input('post.aid'),$ziduan);
         if($res){return json_encode(['ok'=>'y']);exit;}
@@ -73,8 +75,9 @@ class Article extends Adminbase
     public function is_delete()
     {
         //$res = Article::where('aid',input('post.aid'))->update(['is_delete'=>1]);
+        $aid = $this->request->post('aid');
         $ziduan  = ['is_delete'=>1];
-        $res = $this->db->edit_ziduan(input('post.aid'),$ziduan);
+        $res = $this->db->edit_ziduan($aid,$ziduan);
         if($res){return json_encode(['ok'=>'y']);exit;}
     }
 
@@ -82,23 +85,9 @@ class Article extends Adminbase
     public function add_tag()
     {
         //获取到需要添加的标签
-        $data = input('post.');
-        //首先判断标签库中是否存在该文章的标签
-        $a_tag = Db::name('article_tag')->where('aid',$data['aid'])->field('aid,tid')->select();
-        if(!empty($a_tag)){
-            //如果存在标签，则执行替换标签操作（将原有标签删除，增加新的标签）
-            Db::name('article_tag')->where('aid',$data['aid'])->delete();
-            foreach ($data['tid'] as $k => $v) {
-                Db::name('article_tag')->insert(['aid'=>$data['aid'],'tid'=>$v]);
-            }
-            $this->success('已替换标签成功');exit;
-        }else{
-            //如果不存在，则新增文章标签
-            foreach ($data['tid'] as $k => $v) {
-                Db::name('article_tag')->insert(['aid'=>$data['aid'],'tid'=>$v]);
-            }
-            $this->success('已新增标签成功');exit;
-        }
+        $data = $this->request->post();
+        $res = $this->db->add_article_tag($data);
+        if($res){$this->success('添加标签成功');exit;}
     }
 
     //文章回收站
@@ -113,14 +102,16 @@ class Article extends Adminbase
     public function a_huifu()
     {
     	$ziduan  = ['is_delete'=>0];
-        $res = $this->db->edit_ziduan(input('post.aid'),$ziduan);
+    	$aid = $this->request->param('aid');
+        $res = $this->db->edit_ziduan($aid,$ziduan);
         if($res){return json_encode(['ok'=>'y']);exit;}
     }
 
     //彻底删除文章
     public function c_del()
     {
-        if(model('article')->del_all() == true)
+    	$aid = $this->request->param('aid');
+        if(model('ArticleModel')->del_all($aid) == true)
         {
             return json_encode(['ok'=>'y']);exit;
         }

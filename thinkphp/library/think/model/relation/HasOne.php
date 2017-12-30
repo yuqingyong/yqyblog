@@ -23,7 +23,7 @@ class HasOne extends OneToOne
      * @param Model  $parent     上级模型对象
      * @param string $model      模型名
      * @param string $foreignKey 关联外键
-     * @param string $localKey   关联主键
+     * @param string $localKey   当前模型主键
      * @param string $joinType   JOIN类型
      */
     public function __construct(Model $parent, $model, $foreignKey, $localKey, $joinType = 'INNER')
@@ -67,25 +67,30 @@ class HasOne extends OneToOne
     public function has()
     {
         $table      = $this->query->getTable();
+        $model      = basename(str_replace('\\', '/', get_class($this->parent)));
+        $relation   = basename(str_replace('\\', '/', $this->model));
         $localKey   = $this->localKey;
         $foreignKey = $this->foreignKey;
-        return $this->parent->db()->alias('a')
-            ->whereExists(function ($query) use ($table, $localKey, $foreignKey) {
-                $query->table([$table => 'b'])->field('b.' . $foreignKey)->whereExp('a.' . $localKey, '=b.' . $foreignKey);
+        return $this->parent->db()
+            ->alias($model)
+            ->whereExists(function ($query) use ($table, $model, $relation, $localKey, $foreignKey) {
+                $query->table([$table => $relation])->field($relation . '.' . $foreignKey)->whereExp($model . '.' . $localKey, '=' . $relation . '.' . $foreignKey);
             });
     }
 
     /**
      * 根据关联条件查询当前模型
      * @access public
-     * @param mixed $where 查询条件（数组或者闭包）
+     * @param  mixed  $where 查询条件（数组或者闭包）
+     * @param  mixed  $fields   字段
      * @return Query
      */
-    public function hasWhere($where = [])
+    public function hasWhere($where = [], $fields = null)
     {
         $table    = $this->query->getTable();
         $model    = basename(str_replace('\\', '/', get_class($this->parent)));
         $relation = basename(str_replace('\\', '/', $this->model));
+
         if (is_array($where)) {
             foreach ($where as $key => $val) {
                 if (false === strpos($key, '.')) {
@@ -94,8 +99,10 @@ class HasOne extends OneToOne
                 }
             }
         }
+        $fields = $this->getRelationQueryFields($fields, $model);
+
         return $this->parent->db()->alias($model)
-            ->field($model . '.*')
+            ->field($fields)
             ->join($table . ' ' . $relation, $model . '.' . $this->localKey . '=' . $relation . '.' . $this->foreignKey, $this->joinType)
             ->where($where);
     }
@@ -140,13 +147,14 @@ class HasOne extends OneToOne
                     $relationModel = $data[$result->$localKey];
                     $relationModel->setParent(clone $result);
                     $relationModel->isUpdate(true);
-                    if (!empty($this->bindAttr)) {
-                        // 绑定关联属性
-                        $this->bindAttr($relationModel, $result, $this->bindAttr);
-                    }
                 }
-                // 设置关联属性
-                $result->setRelation($attr, $relationModel);
+                if (!empty($this->bindAttr)) {
+                    // 绑定关联属性
+                    $this->bindAttr($relationModel, $result, $this->bindAttr);
+                } else {
+                    // 设置关联属性
+                    $result->setRelation($attr, $relationModel);
+                }
             }
         }
     }
@@ -173,13 +181,13 @@ class HasOne extends OneToOne
             $relationModel = $data[$result->$localKey];
             $relationModel->setParent(clone $result);
             $relationModel->isUpdate(true);
-            if (!empty($this->bindAttr)) {
-                // 绑定关联属性
-                $this->bindAttr($relationModel, $result, $this->bindAttr);
-            }
         }
-
-        $result->setRelation(Loader::parseName($relation), $relationModel);
+        if (!empty($this->bindAttr)) {
+            // 绑定关联属性
+            $this->bindAttr($relationModel, $result, $this->bindAttr);
+        } else {
+            $result->setRelation(Loader::parseName($relation), $relationModel);
+        }
     }
 
 }

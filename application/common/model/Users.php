@@ -16,13 +16,13 @@ class Users extends Model{
 			}else{
 				$where = ['status'=>$stauts];
 			}
-			$list = db('users')->where($where)->paginate($limit);
+			$list = Db::table('users')->where($where)->paginate($limit);
 		}elseif(!empty($kw)){
 			//$where = ['nickname',['like',"%".$kw."%"]];
-			$list = db('users')->where(['nickname'  =>  ['like',"%".$kw."%"]])->paginate($limit);
+			$list = Db::table('users')->where(['nickname'  =>  ['like',"%".$kw."%"]])->paginate($limit);
 		}else{
 			$where = ['type'=>$type];
-			$list = db('users')->where($where)->paginate($limit);
+			$list = Db::table('users')->where($where)->paginate($limit);
 		}
 
 		//分配变量
@@ -49,13 +49,12 @@ class Users extends Model{
 
 
 	//用户注册
-	public function user_register()
+	public function user_register($data)
 	{
-		$data['username'] = input('post.username');
-		$data['password'] = md5(input('post.password'));
-		$data['email'] 	  = input('post.email');
-		$data['type']     = 1;
-		$res = $this->insert($data);
+		$da['password'] = md5($data['password']);
+		$da['username'] = $data['username'];
+		$da['email'] = $data['email'];
+		$res = $this->insert($da);
 		return $res;
 	}
 

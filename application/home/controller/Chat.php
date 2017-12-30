@@ -1,15 +1,15 @@
 <?php
 namespace app\home\controller;
-use app\common\controller\Homebase;
+use app\common\controller\HomeBase;
 use think\request;
 use think\Controller;
 use think\Db;
-class Chat extends Homebase
+class Chat extends HomeBase
 {
 	public function _empty()
 	{
 		$this->view->engine->layout(false);
-		return view('Index/404');
+		return $this->fetch('Index/404');
 	}
    //闲言碎语
    public function chat()
@@ -19,7 +19,7 @@ class Chat extends Homebase
    	 $chat = Db::name('chat')->where('is_show',1)->order('chid desc')->select();
    	 //标签列表
      $tags = Db::name('tags')->order('tid desc')->select();
-     return view('Chat/chat',['chat'=>$chat,'tags'=>$tags]);
+     return $this->fetch('Chat/chat',['chat'=>$chat,'tags'=>$tags]);
    } 
 
    //心愿墙页面
@@ -40,7 +40,7 @@ class Chat extends Homebase
    	 	}else{$this->error('亲，请输入想说的话！');exit;}
    	 	
    	 }
-   	 return view('Chat/message',['message'=>$message]);
+   	 return $this->fetch('Chat/message',['message'=>$message]);
    }
 
    

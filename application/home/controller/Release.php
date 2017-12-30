@@ -1,13 +1,13 @@
 <?php
 namespace app\home\controller;
-use app\common\controller\Homebase;
+use app\common\controller\HomeBase;
 use app\common\model\DemandModel;
 use think\request;
 use think\Session;
 use think\Controller;
 use think\Db;
 use think\Loader;
-class Release extends Homebase
+class Release extends HomeBase
 {
   public function _empty()
   {
@@ -36,7 +36,7 @@ class Release extends Homebase
   		$data['type']  = $requst->post('type');
   		$data['content']   = $requst->post('content','','');
   		$data['__token__'] = $requst->post('__token__');
-		$validate = Loader::validate('Demand');
+		$validate = Loader::validate('DemandValidate');
 		if(!$validate->check($data)){
 		    $this->error($validate->getError());die;
 		}else{

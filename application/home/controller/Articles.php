@@ -1,12 +1,12 @@
 <?php
 namespace app\home\controller;
-use app\common\controller\Homebase;
+use app\common\controller\HomeBase;
 use app\common\model\ArticleModel;
 use app\common\model\CommentModel;
 use think\request;
 use think\Controller;
 use think\Db;
-class Articles extends Homebase
+class Articles extends HomeBase
 {
 	public function _empty()
 	{
@@ -17,7 +17,7 @@ class Articles extends Homebase
     public function detail()
     {
     	//获取AID查询文章详情
-    	$aid = input('aid');
+    	$aid = $this->request->param('aid');
     	$result = Db::name('article')->where('aid',$aid)->find();
         //读取文章评论
         $comment  = new CommentModel();
@@ -28,7 +28,7 @@ class Articles extends Homebase
     	$article = new ArticleModel();
     	$e_article = $article->getPageData('all',$tid[0]['tid'],'1','a.aid,title');
     	$this->click($aid);
-    	return view('Article/detail',[
+    	return $this->fetch('Article/detail',[
             	'art_detail'=>$result,
             	'e_article'=>$e_article['list'],
             	'comments'=>$comments
@@ -44,7 +44,7 @@ class Articles extends Homebase
     	$n_article = $article->getPageData('7','all','1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');
     	//标签列表
     	$tags = Db::name('tags')->order('tid desc')->select();
-    	return view('Article/news',['list'=>$n_article['list'],'page'=>$n_article['page'],'tags'=>$tags]);
+    	return $this->fetch('Article/news',['list'=>$n_article['list'],'page'=>$n_article['page'],'tags'=>$tags]);
     }
 
 
@@ -56,7 +56,7 @@ class Articles extends Homebase
         $n_article = $article->getPageData('2','all','1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');
         //标签列表
         $tags = Db::name('tags')->order('tid desc')->select();
-        return view('Article/jishu',['list'=>$n_article['list'],'page'=>$n_article['page'],'tags'=>$tags]);
+        return $this->fetch('Article/jishu',['list'=>$n_article['list'],'page'=>$n_article['page'],'tags'=>$tags]);
     }
 
     //源码分享
@@ -67,7 +67,7 @@ class Articles extends Homebase
         $n_article = $article->getPageData('3','all','1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');
         //标签列表
         $tags = Db::name('tags')->order('tid desc')->select();
-        return view('Article/share',['list'=>$n_article['list'],'page'=>$n_article['page'],'tags'=>$tags]);
+        return $this->fetch('Article/share',['list'=>$n_article['list'],'page'=>$n_article['page'],'tags'=>$tags]);
     }
 
     //点击量增加

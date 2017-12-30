@@ -1,22 +1,13 @@
 <?php
 namespace app\home\controller;
-use app\common\controller\Homebase;
+use app\common\controller\HomeBase;
 use think\request;
 use think\Controller;
 use think\DB;
 use think\Cookie;
 use think\Wechat;
-class Test extends Homebase
+class Test extends HomeBase
 {
-
-	//数据信息获取页面测试
-	public function get_weixin_msg()
-	{
-		$data   = Cookie::get('user_info');
-		$openid = Cookie::get('openid');
-		dump($openid);
-		dump($data);die;
-	}
 
 	//清除缓存操作
 	public function clear_cache()

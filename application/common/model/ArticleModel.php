@@ -8,7 +8,14 @@ use think\Cache;
  */
 class ArticleModel extends Base{
 	protected $table = "yqy_article";
-	//获取文章列表数据
+
+	/**
+     * 查询文章
+     * @param   $cid   分类条件      
+     * @param   $tid   标签ID      
+     * @param   $is_show   是否显示      
+     * @return  $data  返回数据
+     */
 	public function  getPageData($cid = 'all',$tid='all',$is_show='1',$field = '*',$is_delete=0,$limit=10)
 	{
 		if($cid == 'all' && $tid == 'all'){
@@ -55,15 +62,18 @@ class ArticleModel extends Base{
 
 	}
 
-	//添加文章封面处理
+	/**
+     * 添加文章封面并推送     
+     * @return  $resu  图片添加状态
+     */
 	public function add_article_pic()
 	{
-		$aid = Db::name('article')->order('aid desc')->field('aid')->find();
+		$aid = $this->order('aid desc')->field('aid')->find();
         $info= getpic(input('post.content'));
         //生成缩略图
         $image = \think\Image::open('.'.$info);
-		$image->thumb(220, 150)->save("./upload/".$aid['aid']."thumb.png");
-		$p['path']= "/upload/".$aid['aid']."thumb.png";
+		$image->thumb(220, 150)->save("./static/upload/".$aid['aid']."thumb.png");
+		$p['path']= "/static/upload/".$aid['aid']."thumb.png";
 		$p['aid'] = $aid['aid'];
       	//将得到的图片路径添加至图片表
       	$resu = Db::name('article_pic')->insert($p);
@@ -74,38 +84,49 @@ class ArticleModel extends Base{
       	if($resu){Cache::clear();return true;}else{return false;}
 	}
 
-	//修改文章数据
-	public function edit_article()
+	/**
+     * 修改文章数据     
+     * @return  $result  文章修改状态
+     */
+	public function edit_article($data)
 	{
-		$data   = input('post.');
-		$map    = ['aid'=>input('post.aid')];
+		$map    = ['aid'=>$data['aid']];
 		$result = $this->editData($map,$data);
 		//$result = Db::name('article')->where('aid',input('post.aid'))->update($data);
 		if($result){Cache::clear();return true;}else{return false;}
 	}
 
-	//根据传递的aid查询相关数据
-	public function getDataByAid()
+	/**
+     * 根据传递的aid查询相关数据     
+     * @return  $data  文章修改状态
+     */
+	public function getDataByAid($aid)
 	{
 		$data =  Db::name('article')
                  ->alias('a')
                  ->join('yqy_category b','a.cid = b.cid')
-    	         ->where('aid',input('aid'))
+    	         ->where('aid',$aid)
     	         ->field('aid,title,a.cid,content,author,a.keywords,a.is_show,a.is_delete,sort,click,description,b.cname')->find();
     	return $data;
 	}
 
-	//获取文章分类
+	/**
+     * 获取文章分类     
+     * @return array $data  分类信息
+     */
 	public function getArticleCat()
 	{
 		$data = Db::name('category')->field('cname,cid')->select();
 		return $data;
 	}
 
-	//彻底删除文章
-	public function del_all()
+	/**
+     * 彻底删除文章     
+     * @return true  返回状态
+     */
+	public function del_all($aid)
 	{
-		$aid = input('post.aid');
+		//$aid = input('post.aid');
     	//查询是否存在此文章
     	$article = Db::name('article')->where('aid',$aid)->field('aid')->find();
     	//查询图片路径
@@ -122,7 +143,10 @@ class ArticleModel extends Base{
     	}
 	}
 
-	//修改文章的字段状态
+	/**
+     * 修改文章的字段状态     
+     * @return $res  返回状态
+     */
 	public function edit_ziduan($aid,$ziduan)
 	{
 		$res = Db::name('article')->where('aid',$aid)->update($ziduan);
@@ -130,7 +154,28 @@ class ArticleModel extends Base{
 		return $res;
 	}
 
-
+	/**
+     * 添加文章标签     
+     * @return   返回状态
+     */
+	public function add_article_tag($data){
+		//首先判断标签库中是否存在该文章的标签
+        $a_tag = Db::name('article_tag')->where('aid',$data['aid'])->field('aid,tid')->select();
+        if(!empty($a_tag)){
+            //如果存在标签，则执行替换标签操作（将原有标签删除，增加新的标签）
+            Db::name('article_tag')->where('aid',$data['aid'])->delete();
+            foreach ($data['tid'] as $k => $v) {
+                Db::name('article_tag')->insert(['aid'=>$data['aid'],'tid'=>$v]);
+            }
+            return true;
+        }else{
+            //如果不存在，则新增文章标签
+            foreach ($data['tid'] as $k => $v) {
+                Db::name('article_tag')->insert(['aid'=>$data['aid'],'tid'=>$v]);
+            }
+            return true;
+        }
+	}
 
 
 
