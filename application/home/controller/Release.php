@@ -4,7 +4,6 @@ use app\common\controller\HomeBase;
 use app\common\model\DemandModel;
 use think\request;
 use think\Session;
-use think\Controller;
 use think\Db;
 use think\Loader;
 class Release extends HomeBase
@@ -32,11 +31,11 @@ class Release extends HomeBase
   	$data   = $demand->get_demand_page('1','xid,create_time,title',6);
   	if($request->ispost()){
   		if(Session::has('users')){
-  		$data['title'] = $requst->post('title');
-  		$data['type']  = $requst->post('type');
-  		$data['content']   = $requst->post('content','','');
-  		$data['__token__'] = $requst->post('__token__');
-		$validate = Loader::validate('DemandValidate');
+  		$data['title'] = $this->request->post('title','','htmlentities');
+  		$data['type']  = $this->request->post('type');
+  		$data['content']   = $this->request->post('content','','htmlentities');
+  		$data['__token__'] = $this->request->post('__token__');
+		  $validate = Loader::validate('DemandValidate');
 		if(!$validate->check($data)){
 		    $this->error($validate->getError());die;
 		}else{
@@ -58,10 +57,10 @@ class Release extends HomeBase
   //需求详情
   public function demand_detail()
   {
-  	$xid = input('xid');
+  	$xid = $this->request->param('xid');
   	$this->see_num($xid);
-	//查询详情
-	$detail = Db::name('demand')->where('xid',$xid)->find();
+	  //查询详情
+	  $detail = Db::name('demand')->where('xid',$xid)->find();
   	return view('Release/demand_detail',['art_detail'=>$detail]);
   }
 

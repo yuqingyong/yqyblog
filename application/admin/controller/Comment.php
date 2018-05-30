@@ -2,7 +2,6 @@
 namespace app\admin\controller;
 use app\common\controller\AdminBase;
 use app\common\model\CommentModel;
-use think\controller;
 use think\Db;
 use think\request;
 class Comment extends AdminBase

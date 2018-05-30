@@ -49,26 +49,19 @@ use think\db\Query;
  */
 class Db
 {
-    /**
-     * @var Connection[] 数据库连接实例
-     */
+    //  数据库连接实例
     private static $instance = [];
-
-    /**
-     * @var int 查询次数
-     */
+    // 查询次数
     public static $queryTimes = 0;
-
-    /**
-     * @var int 执行次数
-     */
+    // 执行次数
     public static $executeTimes = 0;
 
     /**
-     * 数据库初始化，并取得数据库类实例
+     * 数据库初始化 并取得数据库类实例
+     * @static
      * @access public
-     * @param  mixed       $config 连接配置
-     * @param  bool|string $name   连接标识 true 强制重新连接
+     * @param mixed         $config 连接配置
+     * @param bool|string   $name 连接标识 true 强制重新连接
      * @return Connection
      * @throws Exception
      */
@@ -77,48 +70,31 @@ class Db
         if (false === $name) {
             $name = md5(serialize($config));
         }
-
         if (true === $name || !isset(self::$instance[$name])) {
             // 解析连接参数 支持数组和字符串
             $options = self::parseConfig($config);
-
             if (empty($options['type'])) {
-                throw new \InvalidArgumentException('Undefined db type');
+                throw new \InvalidArgumentException('Underfined db type');
             }
-
-            $class = false !== strpos($options['type'], '\\') ?
-            $options['type'] :
-            '\\think\\db\\connector\\' . ucwords($options['type']);
-
+            $class = false !== strpos($options['type'], '\\') ? $options['type'] : '\\think\\db\\connector\\' . ucwords($options['type']);
             // 记录初始化信息
             if (App::$debug) {
                 Log::record('[ DB ] INIT ' . $options['type'], 'info');
             }
-
             if (true === $name) {
-                $name = md5(serialize($config));
+                return new $class($options);
+            } else {
+                self::$instance[$name] = new $class($options);
             }
-
-            self::$instance[$name] = new $class($options);
         }
-
         return self::$instance[$name];
     }
 
     /**
-     * 清除连接实例
-     * @access public
-     * @return void
-     */
-    public static function clear()
-    {
-        self::$instance = [];
-    }
-
-    /**
      * 数据库连接参数解析
+     * @static
      * @access private
-     * @param  mixed $config 连接参数
+     * @param mixed $config
      * @return array
      */
     private static function parseConfig($config)
@@ -126,27 +102,30 @@ class Db
         if (empty($config)) {
             $config = Config::get('database');
         } elseif (is_string($config) && false === strpos($config, '/')) {
-            $config = Config::get($config); // 支持读取配置参数
+            // 支持读取配置参数
+            $config = Config::get($config);
         }
-
-        return is_string($config) ? self::parseDsn($config) : $config;
+        if (is_string($config)) {
+            return self::parseDsn($config);
+        } else {
+            return $config;
+        }
     }
 
     /**
-     * DSN 解析
+     * DSN解析
      * 格式： mysql://username:passwd@localhost:3306/DbName?param1=val1&param2=val2#utf8
+     * @static
      * @access private
-     * @param  string $dsnStr 数据库 DSN 字符串解析
+     * @param string $dsnStr
      * @return array
      */
     private static function parseDsn($dsnStr)
     {
         $info = parse_url($dsnStr);
-
         if (!$info) {
             return [];
         }
-
         $dsn = [
             'type'     => $info['scheme'],
             'username' => isset($info['user']) ? $info['user'] : '',
@@ -162,19 +141,13 @@ class Db
         } else {
             $dsn['params'] = [];
         }
-
         return $dsn;
     }
 
-    /**
-     * 调用驱动类的方法
-     * @access public
-     * @param  string $method 方法名
-     * @param  array  $params 参数
-     * @return mixed
-     */
+    // 调用驱动类的方法
     public static function __callStatic($method, $params)
     {
+        // 自动初始化数据库
         return call_user_func_array([self::connect(), $method], $params);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 namespace app\admin\model;
-use think\db;
+use think\Db;
 use think\Model;
 /**	
  * 友情链接模型

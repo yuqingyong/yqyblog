@@ -68,18 +68,12 @@ class BelongsToMany extends Relation
     /**
      * 实例化中间表模型
      * @param $data
-     * @return Pivot
-     * @throws Exception
+     * @return mixed
      */
     protected function newPivot($data = [])
     {
-        $class = $this->pivotName ?: '\\think\\model\\Pivot';
-        $pivot = new $class($data, $this->parent, $this->middle);
-        if ($pivot instanceof Pivot) {
-            return $pivot;
-        } else {
-            throw new Exception('pivot model must extends: \think\model\Pivot');
-        }
+        $pivot = $this->pivotName ?: '\\think\\model\\Pivot';
+        return new $pivot($this->parent, $data, $this->middle);
     }
 
     /**
@@ -99,7 +93,7 @@ class BelongsToMany extends Relation
                     }
                 }
             }
-            $model->setRelation('pivot', $this->newPivot($pivot));
+            $model->pivot = $this->newPivot($pivot);
         }
     }
 
@@ -111,8 +105,9 @@ class BelongsToMany extends Relation
     {
         $foreignKey = $this->foreignKey;
         $localKey   = $this->localKey;
-        $pk         = $this->parent->getPk();
+        $middle     = $this->middle;
         // 关联查询
+        $pk                              = $this->parent->getPk();
         $condition['pivot.' . $localKey] = $this->parent->$pk;
         return $this->belongsToManyQuery($foreignKey, $localKey, $condition);
     }
@@ -167,9 +162,7 @@ class BelongsToMany extends Relation
     public function find($data = null)
     {
         $result = $this->buildQuery()->find($data);
-        if ($result) {
-            $this->hydratePivot([$result]);
-        }
+        $this->hydratePivot([$result]);
         return $result;
     }
 
@@ -212,12 +205,11 @@ class BelongsToMany extends Relation
     /**
      * 根据关联条件查询当前模型
      * @access public
-     * @param  mixed  $where 查询条件（数组或者闭包）
-     * @param  mixed  $fields   字段
+     * @param mixed $where 查询条件（数组或者闭包）
      * @return Query
      * @throws Exception
      */
-    public function hasWhere($where = [], $fields = null)
+    public function hasWhere($where = [])
     {
         throw new Exception('relation not support: hasWhere');
     }
@@ -365,7 +357,7 @@ class BelongsToMany extends Relation
                     }
                 }
             }
-            $set->setRelation('pivot', $this->newPivot($pivot));
+            $set->pivot                      = $this->newPivot($pivot);
             $data[$pivot[$this->localKey]][] = $set;
         }
         return $data;

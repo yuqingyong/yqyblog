@@ -2,7 +2,7 @@
 namespace app\common\controller;
 use think\Controller;
 use think\Session;
-class Adminbase extends controller{
+class AdminBase extends controller{
 	
 	public function _initialize()
 	{

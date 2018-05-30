@@ -2,7 +2,6 @@
 namespace app\admin\controller;
 use app\common\controller\AdminBase;
 use app\common\model\DemandModel;
-use think\controller;
 use think\Db;
 use think\request;
 class Demand extends AdminBase

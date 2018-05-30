@@ -3,7 +3,6 @@ namespace app\admin\controller;
 use app\common\controller\AdminBase;
 use app\admin\model\Link;
 use app\admin\model\Images;
-use think\controller;
 use think\Db;
 use think\request;
 class Elses extends AdminBase
@@ -11,7 +10,7 @@ class Elses extends AdminBase
 	//友情链接列表
     public function friend_url()
     {
-    	$list = Link::where(true)->order('lid desc')->field('lanem,lid,is_show,sort,url')->paginate(10);
+    	$list = Link::where(true)->order('lid desc')->field('lname,lid,is_show,sort,url')->paginate(10);
     	$page = $list->render();
 		return view('Elses/friend_url',['list'=>$list,'page'=>$page]);
     }

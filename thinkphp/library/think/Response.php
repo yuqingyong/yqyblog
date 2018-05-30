@@ -89,9 +89,6 @@ class Response
      */
     public function send()
     {
-        // 监听response_send
-        Hook::listen('response_send', $this);
-
         // 处理输出数据
         $data = $this->getContent();
 
@@ -106,7 +103,7 @@ class Response
                 $this->header['Cache-Control'] = 'max-age=' . $cache[1] . ',must-revalidate';
                 $this->header['Last-Modified'] = gmdate('D, d M Y H:i:s') . ' GMT';
                 $this->header['Expires']       = gmdate('D, d M Y H:i:s', $_SERVER['REQUEST_TIME'] + $cache[1]) . ' GMT';
-                Cache::tag($cache[2])->set($cache[0], [$data, $this->header], $cache[1]);
+                Cache::set($cache[0], [$data, $this->header], $cache[1]);
             }
         }
 

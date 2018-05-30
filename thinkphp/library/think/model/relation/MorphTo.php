@@ -82,11 +82,10 @@ class MorphTo extends Relation
     /**
      * 根据关联条件查询当前模型
      * @access public
-     * @param  mixed  $where 查询条件（数组或者闭包）
-     * @param  mixed  $fields   字段
+     * @param mixed $where 查询条件（数组或者闭包）
      * @return Query
      */
-    public function hasWhere($where = [], $fields = null)
+    public function hasWhere($where = [])
     {
         throw new Exception('relation not support: hasWhere');
     }
@@ -239,18 +238,17 @@ class MorphTo extends Relation
     /**
      * 添加关联数据
      * @access public
-     * @param Model     $model  关联模型对象
-     * @param string    $type   多态类型
+     * @param Model $model       关联模型对象
      * @return Model
      */
-    public function associate($model, $type = '')
+    public function associate($model)
     {
         $morphKey  = $this->morphKey;
         $morphType = $this->morphType;
         $pk        = $model->getPk();
 
         $this->parent->setAttr($morphKey, $model->$pk);
-        $this->parent->setAttr($morphType, $type ?: get_class($model));
+        $this->parent->setAttr($morphType, get_class($model));
         $this->parent->save();
 
         return $this->parent->setRelation($this->relation, $model);
@@ -273,4 +271,11 @@ class MorphTo extends Relation
         return $this->parent->setRelation($this->relation, null);
     }
 
+    /**
+     * 执行基础查询（进执行一次）
+     * @access protected
+     * @return void
+     */
+    protected function baseQuery()
+    {}
 }

@@ -2,7 +2,6 @@
 namespace app\admin\controller;
 use app\common\controller\AdminBase;
 use app\common\model\ArticleModel;
-use think\controller;
 use think\Db;
 use think\request;
 class Article extends AdminBase
@@ -41,6 +40,7 @@ class Article extends AdminBase
                 $ress = $this->db->add_article_pic();
                 if($ress == true){$this->success('添加成功','Article/article_list');exit;}
             }
+           
         }
         return $this->fetch('Article/add_article',['category'=>$category]);
     }

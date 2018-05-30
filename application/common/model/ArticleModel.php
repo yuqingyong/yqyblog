@@ -72,9 +72,12 @@ class ArticleModel extends Base{
         $info= getpic(input('post.content'));
         //生成缩略图
         $image = \think\Image::open('.'.$info);
-		$image->thumb(220, 150)->save("./static/upload/".$aid['aid']."thumb.png");
-		$p['path']= "/static/upload/".$aid['aid']."thumb.png";
+        
+		$image->thumb(220, 150)->save("./upload/".$aid['aid']."thumb.png");
+
+		$p['path']= "/upload/".$aid['aid']."thumb.png";
 		$p['aid'] = $aid['aid'];
+
       	//将得到的图片路径添加至图片表
       	$resu = Db::name('article_pic')->insert($p);
       	//百度推送文章
@@ -126,7 +129,6 @@ class ArticleModel extends Base{
      */
 	public function del_all($aid)
 	{
-		//$aid = input('post.aid');
     	//查询是否存在此文章
     	$article = Db::name('article')->where('aid',$aid)->field('aid')->find();
     	//查询图片路径

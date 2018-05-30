@@ -2,7 +2,6 @@
 namespace app\admin\controller;
 use app\common\controller\AdminBase;
 use app\common\model\ChatModel;
-use think\controller;
 use think\Db;
 use think\request;
 class Chat extends AdminBase

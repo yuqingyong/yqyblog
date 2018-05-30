@@ -1,0 +1,42 @@
+.big_box{width: 800px;height: 640px;background: #BDD7EE;margin: 0 auto;}
+.left_msg{width: 180px;height: 620px;background:#ccc; float: left;margin:10px 10px;}
+.content{width: 580px;height: 440px;background: #fff;float: left;margin: 10px 10px;overflow-y: auto;overflow-x: hidden;}
+.msgs{width: 580px;height: 100px;float: left;margin: 10px 10px;}
+#input_msg{width: 480px;height: 90px;background: #fff;}
+#send_msg{width: 90px;height: 90px;}
+#emoji{width: 50px;height: 50px;float: left;margin-right: 20px;}
+#emoji img{width: 50px;}
+#pic{width: 50px;height: 50px;float: left;}
+#pic img{width: 50px;}
+
+.msg-tb{width:580px;margin:15px auto 0;margin-bottom: 15px;}
+.msg-head{vertical-align:top;width:60px;text-align:center;}
+.msg-head img{width:50px;height:50px;}
+.msg-title{font-size:14px;color: #743283;}
+.msg-me .msg-title,.msg-me .msg-text{text-align:right;}
+.msg-text{padding:10px 0;}
+.msg-text span{display:inline-block;max-width:350px;padding:5px 10px;border-radius:5px;word-break:break-all;text-align:left;cursor:pointer}
+
+.up_msg{overflow:hidden;  width:600px;float: left;margin-left: 48px;box-shadow:2px 2px 5px #999 inset; background: #fff;}
+.up_msg .msg-text span{background:#ccc;}
+.up_msg .msg-tb{border-bottom:1px dotted #ccc}
+ div.msg-go{height:4px;border-radius:2px;margin-bottom:10px;}
+ .up_msg .msg-span{max-width:250px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
+ .up_msg a{float:right;padding:3px;min-width:54px;text-align:center;border:1px solid #ccc;border-radius:5px;margin:0 3px;text-decoration:none;color:#555;font-size:12px}
+.up_msg a:hover{color:#3499da}
+.up-msg-wait{line-height: 20px;font-size: 12px;color: red;position: absolute; width: 600px;text-align: center;}
+
+.msg_more{position:fixed;background:#fff;border:1px solid #ccc;border-radius:5px}
+.msg_more li{width:100px;text-align: center;border-bottom:1px solid #eee;padding:5px 0}
+.msg_more li:hover{color:#3499da}
+.msg_more li:last-child{border-bottom:none}
+
+.msg-other .msg-text span{background:#ccc;}
+.msg-me .msg-text span{background:#abc;}
+
+.emoji{position:absolute;border: 1px solid #ccc;margin-top: 540px;margin-left: 98px;background: #ccc;}
+.emoji td{padding:5px;}
+.emoji td img{cursor:pointer;}
+
+.big_img{width:100%;height:100%;background-color:rgba(0,0,0,0.5);position: fixed;z-index: 99999999;text-align: center;top: 0;left: 0;}
+.t_img{max-width:200px;cursor:pointer;}

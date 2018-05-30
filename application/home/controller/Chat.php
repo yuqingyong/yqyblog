@@ -2,7 +2,6 @@
 namespace app\home\controller;
 use app\common\controller\HomeBase;
 use think\request;
-use think\Controller;
 use think\Db;
 class Chat extends HomeBase
 {

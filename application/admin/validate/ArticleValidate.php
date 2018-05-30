@@ -4,7 +4,7 @@ use think\Validate;
 class ArticleValidate extends Validate
 {
      protected $rule = [
-        'title'  => 'require|max:25',
+        'title'  => 'require|max:35',
         'cid'    => 'require',
         'author' => 'require',
         'content'=> 'require',
@@ -14,7 +14,7 @@ class ArticleValidate extends Validate
     
     protected $message = [
         'title.require' => '名称必须',
-	    'title.max'     => '名称最多不能超过25个字符',
+	    'title.max'     => '名称最多不能超过35个字符',
 	    'cid'           => '分类必须',
 	    'author'        => '作者必须',
 	    'content'       => '内容必须',

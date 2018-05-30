@@ -3,7 +3,7 @@ namespace app\home\validate;
 
 use think\Validate;
 
-class Demand extends Validate
+class DemandValidate extends Validate
 {
     protected $rule =   [
         'title'  => 'require|max:100|token',

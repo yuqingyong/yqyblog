@@ -1,0 +1,3 @@
+<?php
+//000000003600a:3:{i:0;a:4:{s:3:"mid";i:2;s:5:"mname";s:10:"轮播图1";s:3:"img";s:54:"/uploads/20170629\af633ee6c0ce71837590e6e1ed500145.jpg";s:3:"url";s:1:"/";}i:1;a:4:{s:3:"mid";i:3;s:5:"mname";s:10:"轮播图2";s:3:"img";s:54:"/uploads/20170629\ab3df4e0c939aeb7bf96fae9e3f92f0a.jpg";s:3:"url";s:1:"/";}i:2;a:4:{s:3:"mid";i:4;s:5:"mname";s:10:"轮播图3";s:3:"img";s:54:"/uploads/20170629\d9db49211fcd129aeee22bef42fa2bdd.jpg";s:3:"url";s:1:"/";}}
+?>

@@ -27,7 +27,7 @@ class Login extends controller
 			}
 
 			if(!captcha_check($data['code'])){
-			  //验证失败
+			    //验证失败
 				$this->error('验证码错误，请重新输入');
 			};
 

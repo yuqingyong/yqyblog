@@ -4,10 +4,9 @@ use app\common\controller\HomeBase;
 use app\common\model\Users;
 use app\common\model\ArticleModel;
 use think\request;
-use think\Controller;
-use think\Db;
 use think\Session;
 use think\Cookie;
+use think\Db;
 class Index extends HomeBase
 {
 	public function _empty()
@@ -19,7 +18,7 @@ class Index extends HomeBase
     public function index()
     {
     	//友情链接
-    	$link = Db::name('link')->where('is_show',1)->order('sort desc')->cache('link',3600)->select();
+    	$link = Db::name('link')->where('is_show',1)->order('sort desc')->field('lname,url')->cache('link',3600)->select();
 
     	//查询首页轮播图
     	$banner = Db::name('advert')->where(['type'=>1,'is_show'=>1])->field('mid,mname,img,url')->cache('banner',3600)->select();
@@ -28,7 +27,7 @@ class Index extends HomeBase
 		$article = new ArticleModel();
     	$res = $article->getPageData('all','all','1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');
     	
-        return view('Index/index',[
+        return $this->fetch('Index/index',[
         	'banner'=>$banner,
         	'list'=>$res['list'],
         	'page'=>$res['page'],
@@ -92,10 +91,10 @@ class Index extends HomeBase
 		$this->view->engine->layout(false); 
 		if($request->ispost())
 		{
-			$remember = $request->post('remember');
-			$username = $request->post('username');
-			$password = md5($request->post('password'));
-			if(!captcha_check($request->post('code'))){
+			$remember = $this->request->post('remember');
+			$username = $this->request->post('username');
+			$password = md5($this->request->post('password'));
+			if(!captcha_check($this->request->post('code'))){
 				$this->error('验证码错误');exit;
 			}else{
 				//验证用户账号密码
@@ -132,7 +131,7 @@ class Index extends HomeBase
 	//检测用户名是否重复
 	public function check_username()
 	{
-		$username = input('post.username');
+		$username = $this->request->post('username');
 		$res = Db::name('users')->where('username',$username)->field('uid')->find();
 		if($res){echo json_encode(['ok'=>'n']); exit;}else{echo json_encode(['ok'=>'y']); exit;}
 	}

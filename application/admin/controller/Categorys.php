@@ -2,7 +2,6 @@
 namespace app\admin\controller;
 use app\common\controller\AdminBase;
 use app\admin\model\Category;
-use think\controller;
 use think\Db;
 use think\request;
 class Categorys extends AdminBase

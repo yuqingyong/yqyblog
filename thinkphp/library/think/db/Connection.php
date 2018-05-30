@@ -338,8 +338,8 @@ abstract class Connection
      * @param bool          $master 是否在主服务器读操作
      * @param bool          $pdo 是否返回PDO对象
      * @return mixed
+     * @throws BindParamException
      * @throws PDOException
-     * @throws \Exception
      */
     public function query($sql, $bind = [], $master = false, $pdo = false)
     {
@@ -354,15 +354,15 @@ abstract class Connection
             $this->bind = $bind;
         }
 
+        // 释放前次的查询结果
+        if (!empty($this->PDOStatement)) {
+            $this->free();
+        }
+
         Db::$queryTimes++;
         try {
             // 调试开始
             $this->debug(true);
-
-            // 释放前次的查询结果
-            if (!empty($this->PDOStatement)) {
-                $this->free();
-            }
             // 预处理
             if (empty($this->PDOStatement)) {
                 $this->PDOStatement = $this->linkID->prepare($sql);
@@ -386,12 +386,7 @@ abstract class Connection
                 return $this->close()->query($sql, $bind, $master, $pdo);
             }
             throw new PDOException($e, $this->config, $this->getLastsql());
-        } catch (\Throwable $e) {
-            if ($this->isBreak($e)) {
-                return $this->close()->query($sql, $bind, $master, $pdo);
-            }
-            throw $e;
-        } catch (\Exception $e) {
+        } catch (\ErrorException $e) {
             if ($this->isBreak($e)) {
                 return $this->close()->query($sql, $bind, $master, $pdo);
             }
@@ -405,8 +400,8 @@ abstract class Connection
      * @param string        $sql sql指令
      * @param array         $bind 参数绑定
      * @return int
+     * @throws BindParamException
      * @throws PDOException
-     * @throws \Exception
      */
     public function execute($sql, $bind = [])
     {
@@ -421,15 +416,15 @@ abstract class Connection
             $this->bind = $bind;
         }
 
+        //释放前次的查询结果
+        if (!empty($this->PDOStatement) && $this->PDOStatement->queryString != $sql) {
+            $this->free();
+        }
+
         Db::$executeTimes++;
         try {
             // 调试开始
             $this->debug(true);
-
-            //释放前次的查询结果
-            if (!empty($this->PDOStatement) && $this->PDOStatement->queryString != $sql) {
-                $this->free();
-            }
             // 预处理
             if (empty($this->PDOStatement)) {
                 $this->PDOStatement = $this->linkID->prepare($sql);
@@ -454,12 +449,7 @@ abstract class Connection
                 return $this->close()->execute($sql, $bind);
             }
             throw new PDOException($e, $this->config, $this->getLastsql());
-        } catch (\Throwable $e) {
-            if ($this->isBreak($e)) {
-                return $this->close()->execute($sql, $bind);
-            }
-            throw $e;
-        } catch (\Exception $e) {
+        } catch (\ErrorException $e) {
             if ($this->isBreak($e)) {
                 return $this->close()->execute($sql, $bind);
             }
@@ -476,10 +466,6 @@ abstract class Connection
      */
     public function getRealSql($sql, array $bind = [])
     {
-        if (is_array($sql)) {
-            $sql = implode(';', $sql);
-        }
-
         foreach ($bind as $key => $val) {
             $value = is_array($val) ? $val[0] : $val;
             $type  = is_array($val) ? $val[1] : PDO::PARAM_STR;
@@ -492,8 +478,8 @@ abstract class Connection
             $sql = is_numeric($key) ?
             substr_replace($sql, $value, strpos($sql, '?'), 1) :
             str_replace(
-                [':' . $key . ')', ':' . $key . ',', ':' . $key . ' ', ':' . $key . PHP_EOL],
-                [$value . ')', $value . ',', $value . ' ', $value . PHP_EOL],
+                [':' . $key . ')', ':' . $key . ',', ':' . $key . ' '],
+                [$value . ')', $value . ',', $value . ' '],
                 $sql . ' ');
         }
         return rtrim($sql);
@@ -566,7 +552,7 @@ abstract class Connection
      * @access protected
      * @param bool   $pdo 是否返回PDOStatement
      * @param bool   $procedure 是否存储过程
-     * @return PDOStatement|array
+     * @return array
      */
     protected function getResult($pdo = false, $procedure = false)
     {
@@ -632,8 +618,7 @@ abstract class Connection
     /**
      * 启动事务
      * @access public
-     * @return bool|mixed
-     * @throws \Exception
+     * @return void
      */
     public function startTrans()
     {
@@ -657,12 +642,7 @@ abstract class Connection
                 return $this->close()->startTrans();
             }
             throw $e;
-        } catch (\Exception $e) {
-            if ($this->isBreak($e)) {
-                return $this->close()->startTrans();
-            }
-            throw $e;
-        } catch (\Error $e) {
+        } catch (\ErrorException $e) {
             if ($this->isBreak($e)) {
                 return $this->close()->startTrans();
             }
@@ -744,7 +724,7 @@ abstract class Connection
      * @param array $sqlArray SQL批处理指令
      * @return boolean
      */
-    public function batchQuery($sqlArray = [], $bind = [])
+    public function batchQuery($sqlArray = [])
     {
         if (!is_array($sqlArray)) {
             return false;
@@ -753,7 +733,7 @@ abstract class Connection
         $this->startTrans();
         try {
             foreach ($sqlArray as $sql) {
-                $this->execute($sql, $bind);
+                $this->execute($sql);
             }
             // 提交事务
             $this->commit();
@@ -761,7 +741,6 @@ abstract class Connection
             $this->rollback();
             throw $e;
         }
-
         return true;
     }
 
@@ -803,7 +782,7 @@ abstract class Connection
     /**
      * 是否断线
      * @access protected
-     * @param \PDOException|\Exception  $e 异常对象
+     * @param \PDOException  $e 异常对象
      * @return bool
      */
     protected function isBreak($e)

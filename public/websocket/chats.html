@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>聊天界面</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script src="http://www.bijuw.com/static/home/js/7ui.js"></script>
+</head>
+<link rel="stylesheet" type="text/css" href="chat.css">
+<body>
+	<div class="big_box">
+		<div class="left_msg"></div>
+		<div class="content" id="content"></div>
+		<div class="msgs">
+			<input id="input_msg">
+			<button id="send_msg" onclick="sendMsg()">发送</button>
+			<div id="emoji"><img src="emoji.png"></div>
+			<div id="pic" onclick="send_pic()"><img src="pic.png"></div>
+			<input type="file" id="user_img" onchange="load_img(this.files[0]);" hidden/>
+		</div>
+
+		<!-- 聊天表情 -->
+		<div class="emoji_div" style="display: none;"></div>
+
+	</div>
+	<!-- 显示大图 -->
+	<div class="big_img" style="display: none;">
+	    <img src="">
+	</div>
+</body>
+<script type="text/javascript" src="chat.js"></script>
+<script>
+	$('#emoji').on('click', function(e) {
+        e.stopPropagation();
+        if ($('.emoji_div').find('.emoji').size() == 0) {
+            show_biaoqing();
+        }
+        $('.emoji_div').fadeIn();
+    });
+
+
+    //点击空白大图显示消失
+    $(document).click(function(){
+        // $(".big_img").hide();
+        
+        //表情消息
+        $(".emoji_div").fadeOut();
+    })
+
+</script>
+</html>

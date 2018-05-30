@@ -15,11 +15,12 @@ class Comments extends HomeBase
 	}
 
      //添加评论
-  	public function add_comment()
+  	public function add_comment(Request $request)
   	{
     	//判断用户是否登录
     	if(Session::has('users')){
-    	  $data = $request->post();
+        $data['aid'] = $this->request->post('aid');
+        $data['content'] = $this->request->post('content','','htmlspecialchars');
     	  $data['uid'] = Session::get('users.uid');
     	  $data['date']= time();
     	  $res = Db::name('Comment')->insert($data);
