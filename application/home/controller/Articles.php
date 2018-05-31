@@ -4,7 +4,6 @@ use app\common\controller\HomeBase;
 use app\common\model\ArticleModel;
 use app\common\model\CommentModel;
 use think\request;
-use think\Controller;
 use think\Db;
 class Articles extends HomeBase
 {
@@ -13,6 +12,7 @@ class Articles extends HomeBase
 		$this->view->engine->layout(false);
 		return view('Index/404');
 	}
+
     //文章详情
     public function detail()
     {
@@ -31,7 +31,7 @@ class Articles extends HomeBase
     	return $this->fetch('Article/detail',[
             	'art_detail'=>$result,
             	'e_article'=>$e_article['list'],
-            	'comments'=>$comments
+            	'comments'=>json_encode($comments)
             ]
         );
     }

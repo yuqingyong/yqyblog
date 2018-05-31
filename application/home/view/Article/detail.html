@@ -1,3 +1,6 @@
+  <style>
+    .header_img{width: 50px;height: 50px;float: left;margin-right: 10px;}
+  </style>
   <section class="container">
   <div class="content-wrap">
     <div class="content" style="background:#fff;">
@@ -31,28 +34,26 @@
         <h3>评论</h3>
       </div>
       <div id="respond">
-                <div class="comment">
-                    <!-- <input name="user_name" id="" class="form-control" size="22" placeholder="您的昵称（必填）" maxlength="15" autocomplete="off" tabindex="1" type="text">
-                    <input name="email" id="" class="form-control" size="22" placeholder="您的网址或邮箱（非必填）" maxlength="58" autocomplete="off" tabindex="2" type="text"> -->
-                    <div class="comment-box">
-                        <textarea placeholder="您的评论或留言（必填）" name="content" id="comment-textarea" cols="100%" rows="3" tabindex="3"></textarea>
-                        <div class="comment-ctrl">
-                            <button type="button" name="comment-submit" id="comment-submit" tabindex="4" onclick="add_comment({$art_detail.aid})">评论</button>
-                        </div>
+            <div class="comment">
+                <div class="comment-box">
+                    <textarea placeholder="您的评论或留言（必填）" class="user_input" name="content" id="comment-textarea" cols="100%" rows="3" tabindex="3"></textarea>
+                    <div class="comment-ctrl">
+                        <i style="font-size: 30px;padding: 5px;color: #ccc;float: left;" class="fa fa-smile-o" id="emoji_tip"></i>
+                        <input style="height: 30px;float: left;margin-top: 5px;float: left;width: 185px;" class="form-control b-email" id="email" type="text" name="email" placeholder="接收回复的email地址" value="">
+                        <button type="button" name="comment-submit" id="comment-submit" tabindex="4" onclick="add_comment({$art_detail.aid})">评论</button>
                     </div>
                 </div>
+            </div>
+            <!-- 表情 -->
+            <div class="emoji_div" style="display: none;"></div>
         </div>
       <div id="postcomments">
-        <ol id="comment_list" class="commentlist"> 
-        {volist name="comments" id="va"}
-        <li class="comment-content"><span class="comment-f">{$va.date|date='Y-m-d H:i',###}</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">{$va.username}</a><span class="time">2</span><br>{$va.content}</p></div></li>
-        {volist name="va.child" id="vo"}
-          <li class="comment-content" style="padding-left: 50px;"><span class="comment-f">{$vo.date|date='Y-m-d H:i',###}</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">{$vo.username}</a><span class="time">2</span><br>{$vo.content}</p></div></li>
-        {volist name="vo.child" id="ve"}
-          <li class="comment-content" style="padding-left: 100px;"><span class="comment-f">{$ve.date|date='Y-m-d H:i',###}</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">{$ve.username}</a><span class="time">2</span><br>{$ve.content}</p></div></li>
-        {/volist}
-        {/volist}
-        {/volist}
+        <ol id="comment_list" class="commentlist">
+          <!-- <li class="comment-content">
+            <img src="/static/home/images/default_head_img.gif" class="header_img">
+            <span class="comment-f">2018-05-16</span>
+            <div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">yuqingyong</a><br>dkalsjdklasjdlkasjldkasj</p></div>
+          </li> -->
 		    </ol>
       </div>
     </div>
@@ -103,32 +104,110 @@
           </ul>
      </div>
     {include file="public/rili" /}
-     <div class="widget widget_sentence">    
+     <div class="widget widget_sentence">
         {include file="public/music" /}
      </div>
   </aside>
 </section>
 </body>
 <script>
+  var comment = {$comments};
+
+  //评论显示模板
+  var tpl = "<li class='comment-content'><img src='{header}' class='header_img'><span class='comment-f'>{time}</span><div class='comment-main'><p><a class='address' rel='nofollow' target='_blank'>{name}</a><br>{content}</p></div></li>";
+
+  show_comment();
+  // 输入框对象
+  var user_input = document.getElementsByClassName('user_input')[0];
+  // 输入框默认焦点
+  user_input.focus();
+
+  $('#emoji_tip').on('click', function(e) {
+      e.stopPropagation();
+      if ($('.emoji_div').find('.emoji').size() == 0) {
+          show_biaoqing();
+      }
+      $('.emoji_div').fadeIn();
+  });
+
+  // 显示表情
+  function show_biaoqing() {
+      var row = 5, col = 15;
+      var str = '<table class="emoji">';
+      for (var i = 0; i < row; i++) {
+          str += '<tr>';
+          for (var j = 0; j < col; j++) {
+              var n = i * col + j;
+              str += '<td>' + (n > 71 ? '' : ('<img onclick="select_emoji(' + n + ');" src="/static/home/face/' + n + '.gif" />')) + '</td>';
+          }
+          str += '</tr>';
+      }
+      str += '</table>';
+      $('.emoji_div').html(str);
+  }
+
+  // 选择表情
+  function select_emoji(n) {
+      cursor_insert(user_input, '{{@' + n + '}}');
+      $(".emoji_div").fadeOut();
+  }
+
+  // 光标处插入内容
+  function cursor_insert(obj, txt) {
+      if (document.selection) {
+          obj.selection.createRange().text = txt;
+      } else {
+          var v = obj.value;
+          var i = obj.selectionStart;
+          obj.value = v.substr(0, i) + txt + v.substr(i);
+          user_input.focus();
+          obj.selectionStart = i + txt.length;
+      }
+  }
+
+  // 解析消息中的表情
+  function analysis_emoji(str) {
+      var p = /{{@(\d|[1-6]\d|7[01])}}/;
+      if (p.test(str)) {
+          return analysis_emoji(str.replace(p, "<img src='/static/home/face/$1.gif'/>"))
+      } else {
+          return str;
+      }
+  }
+
+  //显示评论
+  function show_comment(){
+    var str = '';
+    for(var i in comment){
+      var data = comment[i];
+      str += tpl.replace('{header}',data.head_img != 0 ? data.head_img : '/static/home/images/default_head_img.gif').replace('{time}',data.date).replace('{name}',data.username).replace('{content}',analysis_emoji(data.content));
+    }
+    $("#comment_list").html(str);
+  }
+
   //添加评论
   function add_comment(aid){
     var content = $("#comment-textarea").val();
+    var email = $("#email").val();
+    // var preg = '/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/';
     if(content == ''){
-    	layer.msg('评论的内容不能为空！')
+    	layer.msg('评论的内容或者邮箱不能为空！');
+    }else if(!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)){
+      layer.msg('邮箱格式不正确1');
     }else{
     	$.ajax({
 	       url:"{:url('home/Comments/add_comment')}",
 	       type:'post',
-	       data:{'aid':aid,'content':content},
-	       success:function(msg){
-	          var _json = JSON.parse(msg);
-	          if(_json.ok == 'y'){
-	            layer.msg('评论成功！')
+	       data:{'aid':aid,'content':content,'email':email},
+	       success:function(date){
+	          var _json = JSON.parse(date);
+	          if(_json.status == 1){
+	            layer.msg(_json.msg)
 	            setTimeout(function() {
 	                location.reload();
 	            }, 3000);
 	          }else{
-	            layer.msg('您还未登录，请先登录！')
+	            layer.msg(_json.msg)
 	            setTimeout(function() {
 	                location.reload();
 	            }, 3000);

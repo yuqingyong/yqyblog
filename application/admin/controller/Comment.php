@@ -26,7 +26,8 @@ class Comment extends AdminBase
     	$status = $this->request->post('status');
     	$data   = ['status'=>$status];
     	$map 	= ['cmtid'=>input('post.cmtid')];
-    	$res 	= $this->db->editData($map,$data);
+        $comment = new CommentModel();
+    	$res 	= $comment->editData($map,$data);
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 

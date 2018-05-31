@@ -17,19 +17,17 @@ class CommentModel extends Base{
         return $status[$value];
     }
 
-
-
 	//读取评论列表
 	public function get_comment($aid)
 	{
-		//读取无限级分类评论
-		$list = db('comment')
+		$list = Db::name('comment')
 			  ->alias('a')
 			  ->join('yqy_users b','a.uid = b.uid')
-			  ->where(['a.status'=>1,'aid'=>$aid])
-			  ->field('username,content,aid,pid,cmtid,date')->select();
-		$data = third_category($list,0);
-		return $data;
+			  ->where(['a.status'=>1,'aid'=>$aid])->field('content,date,a.email,a.status,b.username,b.head_img')->select();
+		foreach ($list as $k => $v) {
+			$list[$k]['date'] = date('Y-m-d H:i:s',$v['date']);
+		}
+		return $list;
 	}
 	
 }
