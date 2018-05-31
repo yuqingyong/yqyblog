@@ -1,14 +1,13 @@
 <?php
 namespace app\home\controller;
 use app\common\controller\HomeBase;
-use app\api\model\Redis;
 use think\request;
 use think\DB;
 use think\Cookie;
-use think\Cache;
 use think\Wechat;
 class Test extends HomeBase
 {
+
 	//清除缓存操作
 	public function clear_cache()
 	{
@@ -30,12 +29,14 @@ class Test extends HomeBase
 		exit;
 	}
 
+
 	//拼接详细的消费信息(格式:您好！某某用户在2017-05-29 14:25时分在商店一使用了2张免单券)
 	public function use_log(){
 		$time = date('Y-m-d H:i:s',time());
 		$str  = "在".$time."执行了添加标签操作";
 		$res  = file_put_contents("/data/wwwroot/default/test_log.txt",$str."\r\n",FILE_APPEND);
 	}
+
 
 	//微信发送模板消息测试
 	public function sendtemplatemsg()
@@ -93,6 +94,7 @@ class Test extends HomeBase
 		}
 	}
 
+
 	//判断是否存在openid用户并处理
 	public function is_openid($openid,$user_info)
 	{
@@ -118,20 +120,6 @@ class Test extends HomeBase
 		}
 	}
 
-	//测试reids
-	public function redis_use()
-	{
-		// $str = "hello world yuqingyong my web";
-		// Redis::set('yuqingyong',$str);
-		// $msg = Redis::get('yuqingyong');
-		// $yqy = Redis::get('yqy');
-		// dump($yqy);
-		// dump($msg);die;
-		$name = "yuqingyong";
-		Cache::set('chengda',$name);
-
-		dump(Cache::get('chengda'));
-	}
 
 
 

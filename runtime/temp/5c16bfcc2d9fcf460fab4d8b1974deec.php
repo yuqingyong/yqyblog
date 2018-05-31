@@ -1,3 +1,4 @@
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:76:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\User\user_list.html";i:1527680403;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -13,7 +14,7 @@
 <script src="__PUBLIC__/admin/js/layer.js"></script>
 </head>
 <body>
-<form method="post" action="{:url('admin/User/user_list')}" id="listform">
+<form method="post" action="<?php echo url('admin/User/user_list'); ?>" id="listform">
    <div class="panel admin-panel">
     <div class="panel-head"><strong class="icon-reorder"> 会员列表</strong></div>
     <div class="padding border-bottom">
@@ -37,32 +38,29 @@
         <th>是否启用</th>
         <th width="310">操作</th>
       </tr>
-		{volist name="list" id="va"}
+		<?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$va): $mod = ($i % 2 );++$i;?>
         <tr>
-          <td style="text-align:left; padding-left:20px;">{$va.uid}</td>
-          <td>{$va.nickname}</td>
-          <td>{$va.type}</td>
-          <td>{$va.last_login_time|date="Y-m-d H:i:s",###}</td>
-          <td>{$va.login_times}</td>
-		  {switch name="$va.status" }
-		    {case value="1"}<td>是</td>{/case}
-		    {case value="0"}<td style="color: red;">否</td>{/case}
-		  {/switch}
+          <td style="text-align:left; padding-left:20px;"><?php echo $va['uid']; ?></td>
+          <td><?php echo $va['nickname']; ?></td>
+          <td><?php echo $va['type']; ?></td>
+          <td><?php echo date("Y-m-d H:i:s",$va['last_login_time']); ?></td>
+          <td><?php echo $va['login_times']; ?></td>
+		  <?php switch($va['status']): case "1": ?><td>是</td><?php break; case "0": ?><td style="color: red;">否</td><?php break; endswitch; ?>
           <td>
           	<div class="button-group"> 
-          		{if condition="$va.status eq 0"}
-          		<a class="button border-main" href="javascript:void(0)" onclick="return edit_status({$va.uid},1)"><span class="icon-edit"></span> 启用</a>
-          		{else/}
-          		<a class="button border-main" href="javascript:void(0)" onclick="return edit_status({$va.uid},0)"><span class="icon-edit"></span> 禁用</a>
-          		{/if}
-          		<a class="button border-main" href="{:url('admin/User/replay_email',array('uid'=>$va['uid']))}"><span class="icon-edit"></span> 邮件回复</a>
+          		<?php if($va['status'] == 0): ?>
+          		<a class="button border-main" href="javascript:void(0)" onclick="return edit_status(<?php echo $va['uid']; ?>,1)"><span class="icon-edit"></span> 启用</a>
+          		<?php else: ?>
+          		<a class="button border-main" href="javascript:void(0)" onclick="return edit_status(<?php echo $va['uid']; ?>,0)"><span class="icon-edit"></span> 禁用</a>
+          		<?php endif; ?>
+          		<a class="button border-main" href="<?php echo url('admin/User/replay_email',array('uid'=>$va['uid'])); ?>"><span class="icon-edit"></span> 邮件回复</a>
           	</div>
           </td>
         </tr>
-		{/volist}
+		<?php endforeach; endif; else: echo "" ;endif; ?>
     </table>
     <div class="page">
-    	{$page}
+    	<?php echo $page; ?>
     </div>
   </div>
 </form>
@@ -76,7 +74,7 @@ function edit_status(uid,status)
 	}, function(){
 	    $.ajax({
 			type:"post",
-			url:"{:url('admin/User/edit_status')}",
+			url:"<?php echo url('admin/User/edit_status'); ?>",
 			data:{'uid':uid,'status':status},
 			success:function(msg){
 				var _json = JSON.parse(msg);

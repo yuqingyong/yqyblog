@@ -39,9 +39,11 @@ class Users extends Model{
 		$res = DB::name('users')->where(['username'=>$username,'password'=>$password])->field('type,status,uid,username')->find();
 		if($res > 0){
 			//如果验证通过则更新用户的登录IP和时间
-			$data['last_login_time'] = date('Y-m-d H:i:s',time());
+			$data['last_login_time'] = time();
 			$data['last_login_ip']   = get_real_ip();
-			$result = DB::name('users')->where('uid',$res['uid'])->field('last_login_time,last_login_ip')->update($data);
+			$result = Db::name('users')->where('uid',$res['uid'])->field('last_login_time,last_login_ip')->update($data);
+			//登录次数自增1
+			Db::name('users')->where('uid',$res['uid'])->setInc('login_times');
 			return $res;
 		}
 		return false;
