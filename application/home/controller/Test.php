@@ -120,7 +120,19 @@ class Test extends HomeBase
 		}
 	}
 
-
+	 //企业付款到零钱
+    public function compayTouser()
+    {
+        require_once EXTEND_PATH.'wxpay'.DS.'Recharge.php';
+        $recharge = new \Recharge();
+        $data = [
+            'openid' => 'ozriaxMyp0eFljJkjkz4SKcfI3Sg',
+            'price'  => '100',
+            'order_number' => 'qmzs'.time(),
+        ];
+        $res = $recharge->comPay($data);
+        dump($res);die;
+    }
 
 
 }

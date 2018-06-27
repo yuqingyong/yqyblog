@@ -31,9 +31,9 @@ class Release extends HomeBase
   	$data   = $demand->get_demand_page('1','xid,create_time,title',6);
   	if($request->ispost()){
   		if(Session::has('users')){
-  		$data['title'] = $this->request->post('title','','htmlentities');
+  		$data['title'] = $this->request->post('title','','htmlspecialchars');
   		$data['type']  = $this->request->post('type');
-  		$data['content']   = $this->request->post('content','','htmlentities');
+  		$data['content']   = $this->request->post('content','','htmlspecialchars');
   		$data['__token__'] = $this->request->post('__token__');
 		  $validate = Loader::validate('DemandValidate');
 		if(!$validate->check($data)){
