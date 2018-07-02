@@ -59,9 +59,27 @@ class Config extends AdminBase
     {
         $id = $this->request->param('id');
         $config = Db::name('config')->where('id',$id)->field('config_name,id,config,type')->find();
+        $config['config'] = json_decode($config['config'],true);
+
+        if($request->isPost()){
+            //$type = $this->request->post('type');
+            $data['appid'] = $this->request->post('appid');
+            $data['appsecret'] = $this->request->post('appsecret');
+            if($config['type'] == 1){
+                # 支付宝参数修改
+                $data['mchid'] = $this->request->post('mchid');
+                $data['mchkey'] = $this->request->post('mchkey');
+                $config_name = $this->request->post('config_name');
+                $id = $this->request->post('id');
+                $config = json_encode($data);
+                $res = Db::name('config')->where('id',$id)->update(['config_name'=>$config_name,'config'=>$config]);
+            }elseif ($config['type'] == 2) {
+                # 微信配置修改
+            }
+        }
+
         return $this->fetch('Config/edit_config',['config'=>$config]);
     }
-
 
     //是否启用
     public function is_show(Request $request)

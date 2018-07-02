@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:80:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\Config\edit_config.html";i:1530513584;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:80:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\Config\edit_config.html";i:1530525597;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -46,7 +46,7 @@
             <label>Appid：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" value="<?php echo $config['zfb_appid']; ?>" name="appid" id="zfb_appid" />
+            <input type="text" class="input w50" value="<?php echo $config['config']['appid']; ?>" name="appid" id="zfb_appid" />
           </div>
         </div>
         <div class="form-group">
@@ -54,7 +54,7 @@
             <label>Appsecret：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" value="<?php echo $config['zfb_appsecret']; ?>" name="appsecret" id="zfb_appsecret" />
+            <input type="text" class="input w50" value="<?php echo $config['config']['appsecret']; ?>" name="appsecret" id="zfb_appsecret" />
           </div>
         </div>
         <div class="clear"></div>
@@ -63,7 +63,7 @@
             <label>支付宝商户ID：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" name="mchid" value="<?php echo $config['zfb_mchid']; ?>" id="zfb_mchid"/>
+            <input type="text" class="input w50" name="mchid" value="<?php echo $config['config']['mchid']; ?>" id="zfb_mchid"/>
           </div>
         </div>
         <div class="form-group">
@@ -71,10 +71,10 @@
             <label>支付宝商户密钥：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" name="mchkey" value="<?php echo $config['zfb_mchkey']; ?>" id="zfb_mchkey" />
+            <input type="text" class="input w50" name="mchkey" value="<?php echo $config['config']['mchkey']; ?>" id="zfb_mchkey" />
           </div>
         </div>
-        {elesif condition="$config.type eq 2"/}
+        <?php elseif($config['type'] == 2): ?>
 
       <!-- 微信配置参数 -->
         <div class="form-group">
@@ -82,7 +82,7 @@
             <label>Appid：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" value="<?php echo $config['wx_appid']; ?>" name="appid" id="wx_appid"/>
+            <input type="text" class="input w50" value="<?php echo $config['config']['appid']; ?>" name="appid" id="wx_appid"/>
           </div>
         </div>
         <div class="form-group">
@@ -90,7 +90,7 @@
             <label>Appsecret：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" value="<?php echo $config['wx_appsecret']; ?>" name="appsecret" id="wx_appsecret"/>
+            <input type="text" class="input w50" value="<?php echo $config['config']['appsecret']; ?>" name="appsecret" id="wx_appsecret"/>
           </div>
         </div>
         <div class="clear"></div>
@@ -99,7 +99,7 @@
             <label>微信商户ID：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" name="mchid" value="<?php echo $config['wx_mchid']; ?>" id="wx_mchid"/>
+            <input type="text" class="input w50" name="mchid" value="<?php echo $config['config']['mchid']; ?>" id="wx_mchid"/>
           </div>
         </div>
         <div class="form-group">
@@ -107,17 +107,17 @@
             <label>微信商户密钥：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" name="mchkey" value="<?php echo $config['wx_mchkey']; ?>" id="wx_mchkey"/>
+            <input type="text" class="input w50" name="mchkey" value="<?php echo $config['config']['mchkey']; ?>" id="wx_mchkey"/>
           </div>
         </div>
-        {elesif condition="$config.type eq 3"/}
+        <?php elseif($config['type'] == 3): ?>
       <!-- 短信配置参数 -->
         <div class="form-group">
           <div class="label">
             <label>Appid：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" value="<?php echo $config['sms_appid']; ?>" name="appid" id="sms_appid"/>
+            <input type="text" class="input w50" value="<?php echo $config['config']['appid']; ?>" name="appid" id="sms_appid"/>
           </div>
         </div>
         <div class="form-group">
@@ -125,7 +125,7 @@
             <label>Appsecret：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" value="<?php echo $config['sms_appsecret']; ?>" name="appsecret" id="sms_appsecret"/>
+            <input type="text" class="input w50" value="<?php echo $config['config']['appsecret']; ?>" name="appsecret" id="sms_appsecret"/>
           </div>
         </div>
         <div class="form-group">
@@ -133,7 +133,7 @@
             <label>模板ID：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" value="<?php echo $config['sms_smsid']; ?>" name="smsid" id="sms_smsid"/>
+            <input type="text" class="input w50" value="<?php echo $config['config']['smsid']; ?>" name="smsid" id="sms_smsid"/>
           </div>
         </div>
         <div class="form-group">
@@ -141,7 +141,7 @@
             <label>短信签名：</label>
           </div>
           <div class="field">
-            <input type="text" class="input w50" value="<?php echo $config['sms_sign']; ?>" name="sign" id="sms_sign"/>
+            <input type="text" class="input w50" value="<?php echo $config['config']['sign']; ?>" name="sign" id="sms_sign"/>
           </div>
         </div>
         <?php endif; ?>
