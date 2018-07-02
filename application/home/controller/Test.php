@@ -120,19 +120,121 @@ class Test extends HomeBase
 		}
 	}
 
-	 //企业付款到零钱
-    public function compayTouser()
-    {
-        require_once EXTEND_PATH.'wxpay'.DS.'Recharge.php';
-        $recharge = new \Recharge();
-        $data = [
-            'openid' => 'ozriaxMyp0eFljJkjkz4SKcfI3Sg',
-            'price'  => '100',
-            'order_number' => 'qmzs'.time(),
-        ];
-        $res = $recharge->comPay($data);
-        dump($res);die;
-    }
+	//测试第四方支付
+	public function pay_four(){
+		$pay_way = $this->request->param('pay_way');
+		error_reporting(E_ALL & ~E_NOTICE);
+		session_start();
+		include('config.php');
+		$ddh = time() . mt_rand(100, 999); //商户订单号
+		$_SESSION['ddh'] = $ddh; //session存储商户订单号
+		$data = array(
+		    "fxid" => $fxid, //商户号
+		    "fxddh" => $ddh, //商户订单号
+		    "fxdesc" => "test", //商品名
+		    "fxfee" => 0.01, //支付金额 单位元
+		    "fxattch" => 'mytest', //附加信息
+		    "fxnotifyurl" => $notifyUrl, //异步回调 , 支付结果以异步为准
+		    "fxbackurl" => $backUrl, //同步回调 不作为最终支付结果为准，请以异步回调为准
+		    "fxpay" => $pay_way, //支付类型 此处可选项以网站对接文档为准 微信公众号：wxgzh   微信H5网页：wxwap  微信扫码：wxsm   支付宝H5网页：zfbwap  支付宝扫码：zfbsm 等参考API
+		    "fxip" => getClientIP(0, true) //支付端ip地址
+		);
+		$data["fxsign"] = md5($data["fxid"] . $data["fxddh"] . $data["fxfee"] . $data["fxnotifyurl"] . $fxkey); //加密
+		$r = getHttpContent($fxgetway, "POST", $data);
+		$backr = $r;
+		$r = json_decode($r, true); //json转数组
+
+		if(empty($r)) exit(print_r($backr)); //如果转换错误，原样输出返回
+
+		//验证返回信息
+		if ($r["status"] == 1) {
+		    header('Location:' . $r["payurl"]); //转入支付页面
+		    exit();
+		} else {
+		    //echo $r['error'].print_r($backr); //输出详细信息
+		    echo $r['error']; //输出错误信息
+		    exit();
+		}
+	}
+
+
+	public function notify(){
+		/**
+		 * 客户端请求本接口 异步回调
+		 * author: fengxing
+		 * Date: 2017/10/7
+		 */
+		error_reporting(E_ALL & ~E_NOTICE);
+		session_start();
+		include('config.php');
+		$fxid = $_REQUEST['fxid']; //商户编号
+		$fxddh = $_REQUEST['fxddh']; //商户订单号
+		$fxorder = $_REQUEST['fxorder']; //平台订单号
+		$fxdesc = $_REQUEST['fxdesc']; //商品名称
+		$fxfee = $_REQUEST['fxfee']; //交易金额
+		$fxattch = $_REQUEST['fxattch']; //附加信息
+		$fxstatus = $_REQUEST['fxstatus']; //订单状态
+		$fxtime = $_REQUEST['fxtime']; //支付时间
+		$fxsign = $_REQUEST['fxsign']; //md5验证签名串
+
+		$mysign = md5($fxstatus . $fxid . $fxddh . $fxfee . $fxkey); //验证签名
+		//记录回调数据到文件，以便排错
+		if ($fxloaderror == 1)
+		    file_put_contents('demo.txt', '异步：' . serialize($_REQUEST) . "\r\n", FILE_APPEND);
+
+		if ($fxsign == $mysign) {
+		    if ($fxstatus == '1') {//支付成功
+		        //支付成功 更改支付状态 完善支付逻辑
+		        $ddh = $_SESSION['ddh'];
+		        echo 'success';
+		    } else { //支付失败
+		        echo 'fail';
+		    }
+		} else {
+		    echo 'sign error';
+		}
+	}
+
+
+	public function preorder()
+	{
+		/**
+		 * 客户端请求本接口 获取订单信息
+		 * author: fengxing
+		 * Date: 2017/10/7
+		 */
+		error_reporting(E_ALL & ~E_NOTICE);
+		include('config.php');
+		$ddh = 'WX2018052918241908'; //需要查询的订单号
+		$data = array(
+		    "fxid" => $fxid, //商户号
+		    "fxddh" => $ddh, //商户订单号
+		    "fxaction" => "orderquery"//查询动作
+		);
+
+		$data["fxsign"] = md5($data["fxid"] . $data["fxddh"] . $data["fxaction"] . $fxkey); //加密
+		$r = file_get_contents($fxgetway . "?" . http_build_query($data));
+		$backr = $r;
+		$r = json_decode($r, true); //json转数组
+		if ($r['fxstatus'] == 1) {
+			dump($r);
+		    //支付成功
+		    exit('支付成功');
+		} else {
+			dump($r);
+		    //支付失败
+		    //exit(print_r($backr)); //返回的详细信息
+		    exit($r['error']); //返回的错误信息
+		}
+
+
+
+
+	}
+
+
+
+
 
 
 }

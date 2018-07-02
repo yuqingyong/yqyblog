@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:76:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\User\user_list.html";i:1527680403;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:76:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\User\user_list.html";i:1523149664;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -31,6 +31,7 @@
     <table class="table table-hover text-center">
       <tr>
         <th width="100" style="text-align:left; padding-left:20px;">ID</th>
+        <th>头像</th>
         <th>昵称</th>
         <th>注册类型</th>
         <th>最新登录</th>
@@ -40,7 +41,8 @@
       </tr>
 		<?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$va): $mod = ($i % 2 );++$i;?>
         <tr>
-          <td style="text-align:left; padding-left:20px;"><?php echo $va['uid']; ?></td>
+          <td style="text-align:left; padding-left:20px;"><input type="checkbox" name="id[]" value="" /><?php echo $va['uid']; ?></td>
+          <td style="width:100px;height: 90px;"><img src="<?php echo $va['head_img']; ?>"></td>
           <td><?php echo $va['nickname']; ?></td>
           <td><?php echo $va['type']; ?></td>
           <td><?php echo date("Y-m-d H:i:s",$va['last_login_time']); ?></td>

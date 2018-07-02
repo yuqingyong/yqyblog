@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:73:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\Index\index.html";i:1516915804;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:73:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\Index\index.html";i:1530496896;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -41,6 +41,10 @@
   <ul>
     <li><a href="<?php echo url('admin/Categorys/category_list'); ?>" target="right"><span class="icon-caret-right"></span>文章分类</a></li>
     <li><a href="<?php echo url('admin/Categorys/tag_list'); ?>" target="right"><span class="icon-caret-right"></span>标签管理</a></li>
+  </ul>
+  <h2><span class="icon-pencil-square-o"></span>配置管理</h2>
+  <ul>
+    <li><a href="<?php echo url('admin/Config/config_list'); ?>" target="right"><span class="icon-caret-right"></span>配置列表</a></li>
   </ul>
   <h2><span class="icon-pencil-square-o"></span>其他管理</h2>
   <ul>

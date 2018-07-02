@@ -9,6 +9,7 @@ class Article extends AdminBase
     private $db;
     // 构造函数 实例化ArticleModel表
     public function __construct(){
+        parent::__construct();
         $this->db = model('ArticleModel');
     }
 

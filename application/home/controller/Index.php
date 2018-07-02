@@ -44,7 +44,7 @@ class Index extends HomeBase
     	$word = $this->request->param('word','','htmlentities');
     	if(!empty($tag) && empty($word)){
     		//标签查询
-    		$model = new Article();
+    		$model = new ArticleModel();
     		$article= $model->getPageData('all',$tag,'1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');
     		return view('Index/article_search',['list'=>$article['list'],'word'=>$word,'tags'=>$tags]);
     	}else{

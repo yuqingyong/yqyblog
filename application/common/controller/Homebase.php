@@ -2,7 +2,7 @@
 namespace app\common\controller;
 use think\Controller;
 use think\Db;
-class HomeBase extends Controller{
+class HomeBase extends controller{
 	
 	public function _initialize()
 	{

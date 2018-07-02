@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:6:{s:73:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\Article\news.html";i:1527317400;s:67:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\layout.html";i:1516915804;s:74:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\header.html";i:1523153678;s:72:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\rili.html";i:1516915804;s:73:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\music.html";i:1527317288;s:74:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\footer.html";i:1522915776;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:6:{s:73:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\Article\news.html";i:1527317400;s:67:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\layout.html";i:1516915804;s:74:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\header.html";i:1527838998;s:72:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\rili.html";i:1516915804;s:73:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\music.html";i:1527317288;s:74:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\footer.html";i:1522915776;}*/ ?>
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -47,13 +47,12 @@
             <li><a href="<?php echo url('home/Index/log_out'); ?>">退出</a></li>
           <?php else: ?>
               <li><a href="<?php echo url('home/Index/login'); ?>">登录</a></li>
-          <?php endif; ?>
-            <li><a href="<?php echo url('home/Index/register'); ?>" rel="nofollow" >注册</a></li>
-            <li><a  onclick="login()" title="第三方登录" >
+              <li><a href="<?php echo url('home/Index/register'); ?>" rel="nofollow" >注册</a></li>
+              <li><a  onclick="login()" title="第三方登录" >
                 <i class="fa fa-rss">
                 </i> 第三方登录
             </a></li>
-            <!--<li><a href="<?php echo url('home/Index/upload'); ?>">文件下载</a></li>-->
+          <?php endif; ?>
         </ul> 勤记录 懂分享</div>
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar" aria-expanded="false"> <span class="sr-only"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
@@ -82,7 +81,7 @@
 </header>
 <script>
   function login(){
-    var txt = "<a href='#'><img src='/static/home/bjy/qq-login.png'></a>";
+    var txt = "<a href='<?php echo url('home/Regnotify/qqsend'); ?>'><img src='/static/home/bjy/qq-login.png'></a>";
     layer.open({
       type: 1,
       skin: 'layui-layer-rim', //加上边框

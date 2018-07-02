@@ -119,8 +119,7 @@
   show_comment();
   // 输入框对象
   var user_input = document.getElementsByClassName('user_input')[0];
-  // 输入框默认焦点
-  user_input.focus();
+  
 
   $('#emoji_tip').on('click', function(e) {
       e.stopPropagation();
@@ -187,6 +186,8 @@
 
   //添加评论
   function add_comment(aid){
+    // 输入框默认焦点
+    user_input.focus();
     var content = $("#comment-textarea").val();
     var email = $("#email").val();
     // var preg = '/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/';
