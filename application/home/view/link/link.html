@@ -1,46 +1,109 @@
   <style>
     .header_img{width: 50px;height: 50px;float: left;margin-right: 10px;}
+    .content ul li{width: 250px;height: 110px;border: 1px solid #3399CC;padding: 5px;float: left;margin: 8px;}
+    .content ul li img{width: 120px;height: 100px;float: left;margin-right: 10px;}
+    .content ul li h3 {float: left;font-size: 16px;}
+    .content ul li p {width: 105px;height: 48px;float: left;font-size: 12px;margin-top: 8px;}
   </style>
   <section class="container">
   <div class="content-wrap">
     <div class="content" style="background:#fff;">
-      <header class="article-header">
-        <h1 class="article-title"><a  title="{$art_detail.title}" >{$art_detail.title}</a></h1>
-        <div class="article-meta"> <span class="item article-meta-time">
-          <time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="发表时间：{$art_detail.create_time|date='Y-m-d H:i',###}"><i class="glyphicon glyphicon-time"></i> {$art_detail.create_time|date='Y-m-d H:i',###}</time>
-          </span> <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="来源：{$art_detail.author}"><i class="glyphicon glyphicon-globe"></i> {$art_detail.author}</span> <span class="item article-meta-category" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="MZ-NetBlog主题"><i class="glyphicon glyphicon-list"></i>
-                  {switch name="$art_detail['cid']"}
-                    {case value="7"}资讯分享{/case}
-                    {case value="2"}技术分享{/case}
-                    {case value="3"}源码分享{/case}
-                    {case value="4"}随心笔记{/case}
-                    {case value="5"}推荐文章{/case}
-                    {/switch}</a></span> <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="浏览量：{$art_detail.click}"><i class="glyphicon glyphicon-eye-open"></i> {$art_detail.click}</span> <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> {$art_detail.comment_num}</span> </div>
-      </header>
-      <article class="article-content">
-          {$art_detail.content}
-      </article>
-      <div class="relates" style="background:#F3F3F3;">
-        <div class="title">
-          <h3>相关推荐</h3>
-        </div>
-        <ul>
-          {volist name="e_article" id="va"}
-              <li><a href="{:url('Home/Articles/detail',array('aid'=>$va['aid']))}" title="" >{$va.title}</a></li>
-          {/volist}
-        </ul>
-      </div>
-      <div class="title" id="comment">
-        <h3>评论</h3>
-      </div>
-      <div id="respond">
+      
+      <ul>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="/upload/119thumb.png">
+          <h3>知乎网</h3>
+          <p>一个文章欣赏平台</p>
+          </a>
+        </li>
+      </ul>
+
+      <div id="respond" style="float: left;width: 800px;">
             <div class="comment">
                 <div class="comment-box">
                     <textarea placeholder="您的评论或留言（必填）" class="user_input" name="content" id="comment-textarea" cols="100%" rows="3" tabindex="3"></textarea>
                     <div class="comment-ctrl">
                         <i style="font-size: 30px;padding: 5px;color: #ccc;float: left;" class="fa fa-smile-o" id="emoji_tip"></i>
                         <input style="height: 30px;float: left;margin-top: 5px;float: left;width: 185px;" class="form-control b-email" id="email" type="text" name="email" placeholder="接收回复的email地址" value="">
-                        <button type="button" name="comment-submit" id="comment-submit" tabindex="4" onclick="add_comment({$art_detail.aid})">评论</button>
+                        <button type="button" name="comment-submit" id="comment-submit" tabindex="4" onclick="add_comment(0)">评论</button>
                     </div>
                 </div>
             </div>
@@ -111,10 +174,6 @@
 </section>
 </body>
 <script>
-  $(document).on('click',function(){
-    $(".emoji_div").fadeOut();
-  })
-
   var comment = {$comments};
 
   //评论显示模板

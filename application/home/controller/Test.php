@@ -1,41 +1,34 @@
 <?php
 namespace app\home\controller;
 use app\common\controller\HomeBase;
+use app\common\model\CommentModel;
+use app\api\model\SendSms;
 use think\request;
-use think\DB;
-use think\Cookie;
+use think\Db;
 use think\Wechat;
 class Test extends HomeBase
 {
-
-	//清除缓存操作
-	public function clear_cache()
+	//阿里大于短信测试
+	public function alidayuSms()
 	{
-		Cookie::delete('user_info');
-		Cookie::delete('openid');
-		echo "Is ok";die;
-	}
+		$sms = new SendSms();
+		$phone = "13372510395";
+		//读取数据库配置
+		$sms_config = Db::name('config')->where('type',3)->where('status',1)->field('config')->find();
+		$config = json_decode($sms_config['config'],true);
 
-	//crontab 定时任务测试
-	public function add_tag()
-	{
-		$data['tname'] = "测试";
-		$res = db('tags')->insert($data);
-		if($res)
-		{
-			//如果添加成功，则写入日志文件
-			$this->use_log();exit;
+		$res = $sms->sendSms($config['appid'],$config['appsecret'],$phone,$config['sign'],$config['smsid']);
+		//根据返回值判断返回类型
+		if($result->message && $result->message == 'OK'){
+			return json_encode(['status'=>1,'msg'=>'发送成功']);
+		}else{
+			dump($result);die;
+			return json_encode(['status'=>0,'msg'=>$result->message]);
 		}
-		exit;
 	}
 
+	
 
-	//拼接详细的消费信息(格式:您好！某某用户在2017-05-29 14:25时分在商店一使用了2张免单券)
-	public function use_log(){
-		$time = date('Y-m-d H:i:s',time());
-		$str  = "在".$time."执行了添加标签操作";
-		$res  = file_put_contents("/data/wwwroot/default/test_log.txt",$str."\r\n",FILE_APPEND);
-	}
 
 
 	//微信发送模板消息测试
@@ -93,147 +86,6 @@ class Test extends HomeBase
 			$this->is_openid($user_info['openid'],$user_info);
 		}
 	}
-
-
-	//判断是否存在openid用户并处理
-	public function is_openid($openid,$user_info)
-	{
-		$res = DB::table('yqy_weixin_user')->where('openid',$openid)->field('uid')->find();
-		if(!empty($res)){
-			//如果查询存在数据,则Cookie缓存查询到的数据
-			Cookie::set('user_info',$user_info,86400*7);
-			//重定向至首页
-			$this->redirect('/');
-		}else{
-			//否则获取用户信息并将新用户添加入数据库中
-			if ($user_info) {
-				//如果存在则添加
-				$data['openid'] = $user_info['openid'];
-				$data['create_time'] = time();
-				$data['update_time'] = time();
-				$ress = DB::table('yqy_weixin_user')->insert($data);
-				//Cookie缓存获取到的数据
-				Cookie::set('user_info',$user_info,86400*7);
-				//重定向至首页
-				$this->redirect('/');
-			}
-		}
-	}
-
-	//测试第四方支付
-	public function pay_four(){
-		$pay_way = $this->request->param('pay_way');
-		error_reporting(E_ALL & ~E_NOTICE);
-		session_start();
-		include('config.php');
-		$ddh = time() . mt_rand(100, 999); //商户订单号
-		$_SESSION['ddh'] = $ddh; //session存储商户订单号
-		$data = array(
-		    "fxid" => $fxid, //商户号
-		    "fxddh" => $ddh, //商户订单号
-		    "fxdesc" => "test", //商品名
-		    "fxfee" => 0.01, //支付金额 单位元
-		    "fxattch" => 'mytest', //附加信息
-		    "fxnotifyurl" => $notifyUrl, //异步回调 , 支付结果以异步为准
-		    "fxbackurl" => $backUrl, //同步回调 不作为最终支付结果为准，请以异步回调为准
-		    "fxpay" => $pay_way, //支付类型 此处可选项以网站对接文档为准 微信公众号：wxgzh   微信H5网页：wxwap  微信扫码：wxsm   支付宝H5网页：zfbwap  支付宝扫码：zfbsm 等参考API
-		    "fxip" => getClientIP(0, true) //支付端ip地址
-		);
-		$data["fxsign"] = md5($data["fxid"] . $data["fxddh"] . $data["fxfee"] . $data["fxnotifyurl"] . $fxkey); //加密
-		$r = getHttpContent($fxgetway, "POST", $data);
-		$backr = $r;
-		$r = json_decode($r, true); //json转数组
-
-		if(empty($r)) exit(print_r($backr)); //如果转换错误，原样输出返回
-
-		//验证返回信息
-		if ($r["status"] == 1) {
-		    header('Location:' . $r["payurl"]); //转入支付页面
-		    exit();
-		} else {
-		    //echo $r['error'].print_r($backr); //输出详细信息
-		    echo $r['error']; //输出错误信息
-		    exit();
-		}
-	}
-
-
-	public function notify(){
-		/**
-		 * 客户端请求本接口 异步回调
-		 * author: fengxing
-		 * Date: 2017/10/7
-		 */
-		error_reporting(E_ALL & ~E_NOTICE);
-		session_start();
-		include('config.php');
-		$fxid = $_REQUEST['fxid']; //商户编号
-		$fxddh = $_REQUEST['fxddh']; //商户订单号
-		$fxorder = $_REQUEST['fxorder']; //平台订单号
-		$fxdesc = $_REQUEST['fxdesc']; //商品名称
-		$fxfee = $_REQUEST['fxfee']; //交易金额
-		$fxattch = $_REQUEST['fxattch']; //附加信息
-		$fxstatus = $_REQUEST['fxstatus']; //订单状态
-		$fxtime = $_REQUEST['fxtime']; //支付时间
-		$fxsign = $_REQUEST['fxsign']; //md5验证签名串
-
-		$mysign = md5($fxstatus . $fxid . $fxddh . $fxfee . $fxkey); //验证签名
-		//记录回调数据到文件，以便排错
-		if ($fxloaderror == 1)
-		    file_put_contents('demo.txt', '异步：' . serialize($_REQUEST) . "\r\n", FILE_APPEND);
-
-		if ($fxsign == $mysign) {
-		    if ($fxstatus == '1') {//支付成功
-		        //支付成功 更改支付状态 完善支付逻辑
-		        $ddh = $_SESSION['ddh'];
-		        echo 'success';
-		    } else { //支付失败
-		        echo 'fail';
-		    }
-		} else {
-		    echo 'sign error';
-		}
-	}
-
-
-	public function preorder()
-	{
-		/**
-		 * 客户端请求本接口 获取订单信息
-		 * author: fengxing
-		 * Date: 2017/10/7
-		 */
-		error_reporting(E_ALL & ~E_NOTICE);
-		include('config.php');
-		$ddh = 'WX2018052918241908'; //需要查询的订单号
-		$data = array(
-		    "fxid" => $fxid, //商户号
-		    "fxddh" => $ddh, //商户订单号
-		    "fxaction" => "orderquery"//查询动作
-		);
-
-		$data["fxsign"] = md5($data["fxid"] . $data["fxddh"] . $data["fxaction"] . $fxkey); //加密
-		$r = file_get_contents($fxgetway . "?" . http_build_query($data));
-		$backr = $r;
-		$r = json_decode($r, true); //json转数组
-		if ($r['fxstatus'] == 1) {
-			dump($r);
-		    //支付成功
-		    exit('支付成功');
-		} else {
-			dump($r);
-		    //支付失败
-		    //exit(print_r($backr)); //返回的详细信息
-		    exit($r['error']); //返回的错误信息
-		}
-
-
-
-
-	}
-
-
-
 
 
 

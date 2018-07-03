@@ -65,17 +65,24 @@ class Config extends AdminBase
             //$type = $this->request->post('type');
             $data['appid'] = $this->request->post('appid');
             $data['appsecret'] = $this->request->post('appsecret');
+            $config_name = $this->request->post('config_name');
+            $id = $this->request->post('id');
             if($config['type'] == 1){
                 # 支付宝参数修改
                 $data['mchid'] = $this->request->post('mchid');
                 $data['mchkey'] = $this->request->post('mchkey');
-                $config_name = $this->request->post('config_name');
-                $id = $this->request->post('id');
-                $config = json_encode($data);
-                $res = Db::name('config')->where('id',$id)->update(['config_name'=>$config_name,'config'=>$config]);
             }elseif ($config['type'] == 2) {
                 # 微信配置修改
+                $data['mchid'] = $this->request->post('mchid');
+                $data['mchkey'] = $this->request->post('mchkey');
+            }elseif ($config['type'] == 3) {
+                # 短信配置
+                $data['smsid'] = $this->request->post('smsid');
+                $data['sign'] = $this->request->post('sign');
             }
+            $config = json_encode($data);
+            $res = Db::name('config')->where('id',$id)->update(['config_name'=>$config_name,'config'=>$config]);
+            if($res){$this->success('修改成功');}else{$this->error('修改失败');}
         }
 
         return $this->fetch('Config/edit_config',['config'=>$config]);

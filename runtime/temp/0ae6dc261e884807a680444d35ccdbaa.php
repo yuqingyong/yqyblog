@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:80:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\Config\edit_config.html";i:1530525597;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:80:"E:\phpStudy\WWW\yqyblog\public/../application/admin\view\Config\edit_config.html";i:1530581101;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -17,7 +17,7 @@
 <div class="panel admin-panel">
   <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>添加配置</strong></div>
   <div class="body-content">
-    <form class="form-x" onsubmit="return false">
+    <form class="form-x" action="<?php echo url('Config/edit_config'); ?>" method="post">
       <div class="form-group">
         <div class="label">
           <label>配置名：</label>
@@ -151,73 +151,11 @@
         </div>
         <div class="field">
           <input type="hidden" name="id" value="<?php echo $config['id']; ?>">
-          <button class="button bg-main icon-check-square-o" onclick="addConfig()"> 提交</button>
+          <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
         </div>
       </div>
       </form>
   </div>
 </div>
 </body>
-<script>
-  //根据type类型显示对应的参数表单
-  $("#type").change(function(){
-    var selectValue = $("#type").val();
-    if(selectValue == 1){
-      $("#alipay").show();
-      $("#weixin").hide();
-      $("#sms").hide();
-    }else if(selectValue == 2){
-      $("#alipay").hide();
-      $("#weixin").show();
-      $("#sms").hide();
-    }else if(selectValue == 3){
-      $("#alipay").hide();
-      $("#weixin").hide();
-      $("#sms").show();
-    } 
-  })
-
-  //根据类型提交配置参数
-  function addConfig()
-  {
-    var selectValue = $("#type").val();
-    var config_name = $("#config_name").val();
-    if(selectValue == 1){
-      // 支付宝参数添加
-      var appid = $("#zfb_appid").val();
-      var appsecret = $("#zfb_appsecret").val();
-      var mchid = $("#zfb_mchid").val();
-      var mchkey = $("#zfb_mchkey").val();
-      if(appid == '' || appsecret == '' || mchid == '' || mchkey == '' || config_name == '')  return layer.msg('请填写完整的配置信息');
-
-      $.post('/admin/Config/add_config',{'type':selectValue,'config_name':config_name,'appid':appid,'appsecret':appsecret,'mchid':mchid,'mchkey':mchkey},function(res){
-        var _json = JSON.parse(res);
-        layer.msg(_json.msg);
-      })
-    }else if (selectValue == 2) {
-      // 微信参数添加
-      var appid = $("#wx_appid").val();
-      var appsecret = $("#wx_appsecret").val();
-      var mchid = $("#wx_mchid").val();
-      var mchkey = $("#wx_mchkey").val();
-      if(appid == '' || appsecret == '' || mchid == '' || mchkey == '' || config_name == '') return layer.msg('请填写完整的配置信息');
-      $.post('/admin/Config/add_config',{'type':selectValue,'config_name':config_name,'appid':appid,'appsecret':appsecret,'mchid':mchid,'mchkey':mchkey},function(res){
-        var _json = JSON.parse(res);
-        layer.msg(_json.msg);
-      })
-    }else if (selectValue == 3) {
-      // 短信参数添加
-      var appid = $("#sms_appid").val();
-      var appsecret = $("#sms_appsecret").val();
-      var smsid = $("#sms_smsid").val();
-      var sign = $("#sms_sign").val();
-      if(appid == '' || appsecret == '' || mchid == '' || mchkey == '' || config_name == '') return layer.msg('请填写完整的配置信息');
-
-      $.post('/admin/Config/add_config',{'type':selectValue,'config_name':config_name,'appid':appid,'appsecret':appsecret,'smsid':smsid,'sign':sign},function(res){
-        var _json = JSON.parse(res);
-        layer.msg(_json.msg);
-      })
-    }
-  }
-</script>
 </html>

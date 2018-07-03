@@ -1,0 +1,3 @@
+<?php
+//000000086400a:8:{i:0;a:2:{s:3:"aid";i:131;s:5:"title";s:24:"myisam与innodb的区别";}i:1;a:2:{s:3:"aid";i:123;s:5:"title";s:23:"mysql密码忘记处理";}i:2;a:2:{s:3:"aid";i:85;s:5:"title";s:37:"使用explain查看SQL语句的效率";}i:3;a:2:{s:3:"aid";i:84;s:5:"title";s:17:"MySQL索引优化";}i:4;a:2:{s:3:"aid";i:80;s:5:"title";s:21:"Git的使用和区别";}i:5;a:2:{s:3:"aid";i:83;s:5:"title";s:32:"关于MySQL的性能优化建议";}i:6;a:2:{s:3:"aid";i:62;s:5:"title";s:20:"Mysql的定时任务";}i:7;a:2:{s:3:"aid";i:57;s:5:"title";s:18:"一切只是开始";}}
+?>
