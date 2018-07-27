@@ -7,7 +7,7 @@ use think\Db;
 use think\request;
 class Elses extends AdminBase
 {
-	//友情链接列表
+	// 友情链接列表
     public function friend_url()
     {
     	$list = Link::where(true)->order('lid desc')->field('lname,lid,is_show,sort,url')->paginate(10);
@@ -15,7 +15,7 @@ class Elses extends AdminBase
 		return view('Elses/friend_url',['list'=>$list,'page'=>$page]);
     }
 
-    //添加友情链接
+    // 添加友情链接
     public function add_friend_url(Request $request)
     {
     	if($request->ispost())
@@ -27,7 +27,7 @@ class Elses extends AdminBase
     	return view('Elses/add_friend_url');
     }
 
-    //修改友情链接
+    // 修改友情链接
     public function edit_friend_url(Request $request)
     {
     	$link= Db::name('link')->where('lid',input('lid'))->find();
@@ -40,7 +40,7 @@ class Elses extends AdminBase
     	return view('Elses/edit_friend_url',['link'=>$link]);
     }
 
-    //删除链接
+    // 删除链接
     public function del_friend_url()
     {
     	$res = Db::name('link')->where('lid',input('post.lid'))->delete();
@@ -51,14 +51,14 @@ class Elses extends AdminBase
     /*****************广告图片管理********************/
     public function img_list()
     {
-        //查询图片广告列表
+        // 查询图片广告列表
         $img_list = Images::where(true)->order('mid desc')->field('mname,mid,is_show,create_time,end_time,url,img,from')->paginate(5);
         $page = $img_list->render();
         return view('Elses/img_list',['list'=>$img_list,'page'=>$page]);
     }
 
 
-    //添加图片
+    // 添加图片
     public function add_img(Request $reqeust)
     {
         if($reqeust->ispost()){
@@ -73,7 +73,7 @@ class Elses extends AdminBase
             $Images = new Images();
             $result = $Images->validate('ImageValidate')->save($data);
             if(false === $result){
-                // 验证失败 输出错误信息
+                # 验证失败 输出错误信息
                 $this->error($Images->getError());exit;
             }else{
                 $this->success('添加成功','Elses/img_list');exit;
@@ -83,7 +83,7 @@ class Elses extends AdminBase
     }
 
 
-    //修改图片
+    // 修改图片
     public function edit_img(Request $reqeust)
     {
         $img = Db::name('advert')->where('mid',input('mid'))->find();
@@ -91,7 +91,7 @@ class Elses extends AdminBase
             $data = $this->request->post();
             $data['create_time'] = strtotime(input('post.create_time'));
             $data['end_time']    = strtotime(input('post.end_time'));
-            //图片上传
+            # 图片上传
             $file = request()->file('img');
             if($file != null){
                 $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');

@@ -36,10 +36,10 @@ class Index extends AdminBase
 	}
 
 
-	//清除缓存
+	// 清除缓存
 	public function clear_cache()
 	{
-		//清除所有的缓存
+		# 清除所有的缓存
 		$res = Cache::clear();
 		if($res == true){$this->success('清除缓存成功！');exit;}
 	}

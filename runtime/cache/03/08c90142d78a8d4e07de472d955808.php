@@ -1,3 +1,0 @@
-<?php
-//000000086400a:2:{i:0;a:9:{s:5:"title";s:41:"关于mysql数据库优化的一篇文章";s:3:"aid";i:134;s:4:"path";s:20:"/upload/134thumb.png";s:5:"click";i:142;s:11:"comment_num";i:0;s:11:"create_time";i:1516076514;s:11:"description";s:41:"关于mysql数据库优化的一篇文章";s:3:"cid";i:2;s:8:"keywords";s:20:"mysql数据库优化";}i:1;a:9:{s:5:"title";s:39:"Linux虚拟机系统和lamp环境安装";s:3:"aid";i:70;s:4:"path";s:19:"/upload/70thumb.png";s:5:"click";i:101;s:11:"comment_num";i:0;s:11:"create_time";i:1497835283;s:11:"description";s:39:"Linux虚拟机系统和lamp环境安装";s:3:"cid";i:2;s:8:"keywords";s:24:"Linux，lamp环境安装";}}
-?>

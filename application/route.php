@@ -17,6 +17,7 @@ Route::rule('share','home/Articles/share');//源码分享路由
 Route::rule('chat','home/Chat/chat');//随心笔记路由
 Route::rule('release','home/Release/index');//需求发布路由
 Route::rule('news_detail/:aid','home/Articles/detail','get');//文章详情路由
+
 return [
     '__pattern__' => [
         'name' => '\w+',

@@ -10,7 +10,8 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
-//获取客户端IP地址
+
+// 获取客户端IP地址
 function get_real_ip()
 {
 	$ip=false;
@@ -32,10 +33,9 @@ function get_real_ip()
 	return($ip ? $ip : $_SERVER['REMOTE_ADDR']);
 }
 
-
-
+// 获取文章内容首张图片
 function getpic($content){
-	$data['content']=$content;//获取的内容  
+	$data['content']=$content;  
 	$soContent=$data['content'];  
 	$soImages = '~<img [^>]* />~';  
 	preg_match_all($soImages, $soContent, $thePics);
@@ -49,10 +49,12 @@ function getpic($content){
 		return null;  
 	}  
 }
-  
-//功能：计算两个时间戳之间相差的日时分秒
-//$begin_time  开始时间戳
-//$end_time 结束时间戳
+
+/**
+ * 计算两个时间戳之间相差的日时分秒
+ * @return $begin_time  开始时间戳
+ * @return $end_time 结束时间戳
+ */
 function timediff($begin_time,$end_time)
 {
       if($begin_time < $end_time){
@@ -62,7 +64,6 @@ function timediff($begin_time,$end_time)
          $starttime = $end_time;
          $endtime = $begin_time;
       }
-
       //计算天数
       $timediff = $endtime-$starttime;
       $days = intval($timediff/86400);
@@ -77,8 +78,6 @@ function timediff($begin_time,$end_time)
       $res = array("day" => $days,"hour" => $hours,"min" => $mins,"sec" => $secs);
       return $res['day'];
 }
-
-
 
 /**
  * 三级分类查询
@@ -126,7 +125,7 @@ function delDirAndFile($path, $delDir = FALSE) {
  * 向百度推送文章
  */
 function pushToBaidu($urls)
-  {
+{
    $api = "http://data.zz.baidu.com/urls?site='www.yuqingyong.cn'&token=你的Token";
    $ch = curl_init();
    $options =  array(
@@ -139,25 +138,25 @@ function pushToBaidu($urls)
    curl_setopt_array($ch, $options);
    $result = curl_exec($ch);
    return $result;
-  }
+}
 
+// 百度推送方式二
+function bdUrls($urls) {  
+      $api = 'http://data.zz.baidu.com/urls?site=www.yuqingyong.cn&token=CPiBRFKrXgiEahWo';
+      $ch = curl_init();
+      $options =  array(
+          CURLOPT_URL => $api,
+          CURLOPT_POST => true,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_POSTFIELDS => implode("\n", $urls),
+          CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+      );
+      curl_setopt_array($ch, $options);
+      $result = curl_exec($ch);
+      echo $result;
+} 
 
- function bdUrls($urls) {  
-        $api = 'http://data.zz.baidu.com/urls?site=www.yuqingyong.cn&token=CPiBRFKrXgiEahWo';
-        $ch = curl_init();
-        $options =  array(
-            CURLOPT_URL => $api,
-            CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POSTFIELDS => implode("\n", $urls),
-            CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
-        );
-        curl_setopt_array($ch, $options);
-        $result = curl_exec($ch);
-        echo $result;
- } 
-
-//参数1：访问的URL，参数2：post数据(不填则为GET)，参数3：提交的$cookies,参数4：是否返回$cookies
+// 参数1：访问的URL，参数2：post数据(不填则为GET)，参数3：提交的$cookies,参数4：是否返回$cookies
 function curl_request($url,$post='',$cookie='', $returnCookie=0){
      $curl = curl_init();
      curl_setopt($curl, CURLOPT_URL, $url);

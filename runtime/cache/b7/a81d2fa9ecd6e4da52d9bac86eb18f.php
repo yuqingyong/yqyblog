@@ -1,3 +1,0 @@
-<?php
-//000000086400a:2:{i:0;a:9:{s:5:"title";s:27:"CentOS6.5下安装Memcached";s:3:"aid";i:82;s:4:"path";s:19:"/upload/82thumb.png";s:5:"click";i:97;s:11:"comment_num";i:0;s:11:"create_time";i:1499389359;s:11:"description";s:27:"CentOS6.5下安装Memcached";s:3:"cid";i:0;s:8:"keywords";s:9:"Memcached";}i:1;a:9:{s:5:"title";s:45:"PHP之分布式缓存memcached熟悉和操作";s:3:"aid";i:76;s:4:"path";s:19:"/upload/76thumb.png";s:5:"click";i:101;s:11:"comment_num";i:0;s:11:"create_time";i:1499137482;s:11:"description";s:45:"PHP之分布式缓存memcached熟悉和操作";s:3:"cid";i:2;s:8:"keywords";s:9:"memcached";}}
-?>

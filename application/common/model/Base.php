@@ -24,16 +24,16 @@ class Base extends Model{
 
 
 
-	//查询分页数据
+	// 查询分页数据
 	public function getPage($table,$map='1=1',$order='',$limit=10,$field='*'){
-		//判断是否需要排序
+		# 判断是否需要排序
 		if(empty($order)){
 			$list = Db::name($table)->where($map)->field($field)->paginate($limit);
 		}else{
 			$list = Db::name($table)->where($map)->field($field)->order($order)->paginate($limit);
 		}
 
-		//分配变量
+		# 分配变量
 		$page = $list->render();
 
 		$data = [
@@ -41,15 +41,15 @@ class Base extends Model{
 			'page'=>$page
 		];
 
-		//返回数据
+		# 返回数据
 		return $data;
 
 	}
 
 
-	//增加数据
+	// 增加数据
 	public function addData($data){
-		// 去除键值首尾的空格
+		# 去除键值首尾的空格
         foreach ($data as $k => $v) {
             $data[$k]=trim($v);
         }
@@ -58,9 +58,9 @@ class Base extends Model{
 	}
 
 
-	//修改数据
+	// 修改数据
 	public function editData($map,$data){
-        // 去除键值首位空格
+        # 去除键值首位空格
         foreach ($data as $k => $v) {
             $data[$k]=trim($v);
         }

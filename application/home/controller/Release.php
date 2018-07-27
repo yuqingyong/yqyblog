@@ -14,8 +14,7 @@ class Release extends HomeBase
   	return view('Index/404');
   }
 
-
-  //需求列表
+  // 需求列表
   public function index()
   {
   	$demand = new DemandModel();
@@ -23,7 +22,7 @@ class Release extends HomeBase
   	return view('Release/index',['list'=>$data['list'],'page'=>$data['page']]);
   }	
   
-  //发布需求
+  // 发布需求
   public function fabu(Request $request)
   {
   	$this->view->engine->layout(false);
@@ -54,18 +53,18 @@ class Release extends HomeBase
   } 
 
   
-  //需求详情
+  // 需求详情
   public function demand_detail()
   {
   	$xid = $this->request->param('xid');
   	$this->see_num($xid);
-	  //查询详情
+	  // 查询详情
 	  $detail = Db::name('demand')->where('xid',$xid)->find();
   	return view('Release/demand_detail',['art_detail'=>$detail]);
   }
 
 
-  //点击量增加
+  // 查看量增加
   public function see_num($xid)
   {
   	Db::name('demand')->where('xid',$xid)->field('see_num')->setInc('see_num');

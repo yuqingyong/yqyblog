@@ -7,7 +7,7 @@ use think\request;
 class Categorys extends AdminBase
 {
 	/***********************************标签管理*****************************************************/
-    //标签列表
+    // 标签列表
     public function tag_list()
     {
     	$Category = new Category();
@@ -16,7 +16,7 @@ class Categorys extends AdminBase
 		return $this->fetch('Category/tag_list',['list'=>$list,'page'=>$page]);
     }
 
-    //修改标签
+    // 修改标签
     public function edit_tag(Request $request){
     	$tag = Category::where('tid',input('tid'))->field('tname,tid')->find();
     	if($request->ispost()){
@@ -27,7 +27,7 @@ class Categorys extends AdminBase
     	return $this->fetch('Category/edit_tag',['tag'=>$tag]);
     }
 
-    //增加标签
+    // 增加标签
     public function add_tag(Request $request){
     	if($request->ispost()){
     		$data = $this->request->post();
@@ -37,7 +37,7 @@ class Categorys extends AdminBase
     	return $this->fetch('Category/add_tag');
     }
 
-    //删除标签
+    // 删除标签
     public function del_tag(Request $request){
 		$tid = $this->request->param('tid');
 		$res  = Category::destroy($tid);
@@ -46,13 +46,13 @@ class Categorys extends AdminBase
 
 
     /********************************分类管理***********************************/
-    //分类列表
+    // 分类列表
     public function category_list(){
     	$list = Db::name('category')->order('cid desc')->field('cname,cid,descripiton')->select();
     	return $this->fetch('Category/category_list',['list'=>$list]);
     }
 
-    //添加分类
+    // 添加分类
     public function add_category(Request $request){
     	if($request->ispost()){
     		$data = $this->request->post();
@@ -62,7 +62,7 @@ class Categorys extends AdminBase
     	return $this->fetch('Category/add_category');
     }	
 
-    //修改分类
+    // 修改分类
     public function edit_category(Request $request){
     	$cid = $this->request->param('cid');
     	$category = Db::name('category')->where('cid',$cid)->field('cid,cname,descripiton,keywords')->find();
@@ -74,7 +74,7 @@ class Categorys extends AdminBase
     	return $this->fetch('Category/edit_category',['category'=>$category]);
     }
 
-    //删除分类
+    // 删除分类
     public function del_category(){
     	$cid = $this->request->param('cid');
     	$res = Db::name('category')->where('cid',$cid)->delete();

@@ -8,7 +8,7 @@ class Comment extends AdminBase
 {
     public function comment_list()
     {
-    	//获取评论列表信息
+    	// 获取评论列表信息
     	$comment_list = Db::name('comment')
     	              ->alias('a')
     	              ->join('article b','a.aid = b.aid')
@@ -20,7 +20,7 @@ class Comment extends AdminBase
     }
 
 
-    //设置评论的显示状态
+    // 设置评论的显示状态
     public function is_show()
     {
     	$status = $this->request->post('status');
@@ -31,7 +31,7 @@ class Comment extends AdminBase
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 
-    //删除评论
+    // 删除评论
     public function del()
     {
     	$res = CommentModel::where('cmtid',input('post.cmtid'))->delete();

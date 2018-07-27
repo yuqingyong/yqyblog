@@ -8,14 +8,14 @@ class Message extends AdminBase
 {
     public function message()
     {
-    	//获取评论列表信息
+    	# 获取评论列表信息
     	$message = Db::name('message')->paginate(15);
     	$page = $message->render();
 		return view('Message/message',['list'=>$message,'page'=>$page]);
     }
 
 
-    //设置文章的显示状态
+    // 设置文章的显示状态
     public function is_show()
     {
     	$id = $this->request->post('id');
@@ -24,7 +24,7 @@ class Message extends AdminBase
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 
-    //删除评论
+    // 删除评论
     public function del()
     {
     	$id = $this->request->post('id');

@@ -6,7 +6,7 @@ use think\Db;
 use think\request;
 class User extends AdminBase
 {
-	//会员列表
+	// 会员列表
     public function user_list(Request $request)
     {
     	if($request->ispost())
@@ -21,7 +21,7 @@ class User extends AdminBase
 		return view('User/user_list',['list'=>$res['list'],'page'=>$res['page']]);
     }
 
-    //修改会员状态
+    // 修改会员状态
     public function edit_status()
     {
     	$status = $this->request->post('status');
@@ -29,7 +29,7 @@ class User extends AdminBase
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 
-    //邮件回复
+    // 邮件回复
     public function replay_email()
     {
     	echo "这是邮箱回复功能！";die;

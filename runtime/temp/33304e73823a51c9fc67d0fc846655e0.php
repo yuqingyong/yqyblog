@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:6:{s:75:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\Article\detail.html";i:1530615948;s:67:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\layout.html";i:1516915804;s:74:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\header.html";i:1527838998;s:72:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\rili.html";i:1516915804;s:73:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\music.html";i:1527317288;s:74:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\footer.html";i:1522915776;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:6:{s:75:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\Article\detail.html";i:1532587446;s:67:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\layout.html";i:1516915804;s:74:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\header.html";i:1527838998;s:72:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\rili.html";i:1532418168;s:73:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\music.html";i:1527317288;s:74:"E:\phpStudy\WWW\yqyblog\public/../application/home\view\public\footer.html";i:1522915776;}*/ ?>
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -328,7 +328,6 @@ window.onload=function(){
   })
 
   var comment = <?php echo $comments; ?>;
-
   //评论显示模板
   var tpl = "<li class='comment-content'><img src='{header}' class='header_img'><span class='comment-f'>{time}</span><div class='comment-main'><p><a class='address' rel='nofollow' target='_blank'>{name}</a><br>{content}</p></div></li>";
 

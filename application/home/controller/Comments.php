@@ -13,7 +13,7 @@ class Comments extends HomeBase
   		return view('Index/404');
   	}
 
-    //添加评论
+    // 添加评论
   	public function add_comment(Request $request)
   	{
       $data['email'] = $this->request->post('email');
@@ -24,7 +24,7 @@ class Comments extends HomeBase
       $rule = "/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/";
       if(!Session::has('users')) return json_encode(['status'=>0,'msg'=>'您还未登录，请先登录']);
       if(!preg_match($rule, $data['email'])) return json_encode(['status'=>0,'msg'=>'邮箱格式不正确']);
-      //插入数据
+      # 插入数据
       $res = Db::name('comment')->insert($data);
       if($res) return json_encode(['status'=>1,'msg'=>'评论成功']);
     }

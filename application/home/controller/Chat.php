@@ -10,22 +10,23 @@ class Chat extends HomeBase
 		$this->view->engine->layout(false);
 		return $this->fetch('Index/404');
 	}
-   //闲言碎语
+
+   // 闲言碎语
    public function chat()
    {
    	 $this->view->engine->layout(false);
-   	 //闲言碎语列表
+   	 # 闲言碎语列表
    	 $chat = Db::name('chat')->where('is_show',1)->order('chid desc')->select();
-   	 //标签列表
+   	 # 标签列表
      $tags = Db::name('tags')->order('tid desc')->select();
      return $this->fetch('Chat/chat',['chat'=>$chat,'tags'=>$tags]);
    } 
 
-   //心愿墙页面
+   // 心愿墙页面
    public function message(Request $request)
    {
    	 $this->view->engine->layout(false);
-   	 //查询留言数据
+   	 # 查询留言数据
    	 $message = Db::name('message')->where('is_show',1)->order('id desc')->select();
    	 if($request->ispost())
    	 {
@@ -42,5 +43,4 @@ class Chat extends HomeBase
    	 return $this->fetch('Chat/message',['message'=>$message]);
    }
 
-   
 }

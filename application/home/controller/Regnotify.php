@@ -6,10 +6,10 @@ use think\request;
 use think\Db;
 class Regnotify extends Controller
 {
-    //发起登录请求
+    // 发起登录请求
     public function qqsend()
     {
-        //参数
+        // 参数
         $url = "https://graph.qq.com/oauth2.0/authorize";
         $param['response_type'] = "code";
         $param['client_id']="101482622";
@@ -25,8 +25,7 @@ class Regnotify extends Controller
         header("Location:".$url);exit;
     }
 
-
-	//QQ互联回调地址
+	// QQ互联回调地址
 	public function QqNotify()
 	{
 		$code = input('get.code');
@@ -47,14 +46,14 @@ class Regnotify extends Controller
             $open_id = $user->openid;
             $url = "https://graph.qq.com/user/get_user_info?access_token=$access_token&oauth_consumer_key=101482622&openid=$open_id";
             $user_info = $this->httpsRequest($url);
-            //查询是否已经存在该openid
+            # 查询是否已经存在该openid
             $res = Db::name('users')->where('openid',$open_id)->field('type,status,uid,username')->find();
             if($res){
-                //如果验证通过则更新用户的登录IP和时间
+                # 如果验证通过则更新用户的登录IP和时间
                 $ta['last_login_time'] = time();
                 $ta['last_login_ip']   = get_real_ip();
                 Db::name('users')->where('uid',$res['uid'])->field('last_login_time,last_login_ip')->update($ta);
-                //登录次数自增1
+                # 登录次数自增1
                 Db::name('users')->where('uid',$res['uid'])->setInc('login_times');
             	Session::set('users',$res);
                 $this->redirect('/');
@@ -76,8 +75,7 @@ class Regnotify extends Controller
         }
 	}
 
-
-	//通过Authorization Code获取Access Token
+	// 通过Authorization Code获取Access Token
     public function getAccessToken($code,$app_id,$app_key){
         $url="https://graph.qq.com/oauth2.0/token";
         $param['grant_type']="authorization_code";
@@ -89,7 +87,7 @@ class Regnotify extends Controller
         $url=$url."?".$param;
         return $this->httpsRequest($url);
     }
-    //httpsRequest
+    // httpsRequest
     public function httpsRequest($post_url){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$post_url);//要访问的地址
@@ -99,8 +97,4 @@ class Regnotify extends Controller
         return $res;
         curl_close($ch);
     }
-
-
-
-
 }

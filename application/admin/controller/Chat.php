@@ -13,15 +13,15 @@ class Chat extends AdminBase
         $this->db = model('ChatModel');
     }
 
-	//随言列表
+	// 随言列表
     public function chat_list()
     {
-    	//读取闲聊列表
+    	// 读取闲聊列表
     	$assign = $this->db->getPage('chat','1=1','chid desc',20,'create_time,chid,is_show,content'); 
 		return view('Chat/chat_list',$assign);
     }
 
-    //添加随笔
+    // 添加随笔
     public function add_chat(Request $request)
     {
     	if($request->ispost())
@@ -34,7 +34,7 @@ class Chat extends AdminBase
     	return view('Chat/add_chat');
     }
 
-    //修改随笔
+    // 修改随笔
     public function edit_chat(Request $request)
     {
     	$chid = $this->request->param('chid');
@@ -49,7 +49,7 @@ class Chat extends AdminBase
     	return view('Chat/edit_chat',['chat'=>$chat]);
     }
 
-    //设置随笔的状态
+    // 设置随笔的状态
     public function is_show()
     {
     	$is_show = $this->request->post('is_show');
@@ -59,7 +59,7 @@ class Chat extends AdminBase
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 
-    //删除随笔
+    // 删除随笔
     public function del()
     {
     	$res = ChatModel::where('chid',input('post.chid'))->delete();

@@ -18,20 +18,20 @@ class Login extends controller
     public function login()
     {
     	if($this->request->isPost()){
-    		#如果提交数据则处理登录验证
+    		# 如果提交数据则处理登录验证
     		$data = $this->request->post();
-    		#验证数据
+    		# 验证数据
     		$validate = Loader::validate('Login');
     		if(!$validate->check($data)){
 			    $this->error($validate->getError());
 			}
 
 			if(!captcha_check($data['code'])){
-			  //验证失败
+			  	# 验证失败
 				$this->error('验证码错误，请重新输入');
 			};
 
-			#通过数据和验证码之后，验证账号密码是否正确
+			# 通过数据和验证码之后，验证账号密码是否正确
 			$login  = new LoginModel();
 			$result = $login->check_login($data);
 			if($result != false){
@@ -45,7 +45,7 @@ class Login extends controller
         return $this->fetch('Login/login');
     }
 
-    #修改密码   md5(md5(input('post.password')).$salt)
+    // 修改密码   md5(md5(input('post.password')).$salt)
 	public function edit_pass()
 	{
 		if($this->request->isPost()){
@@ -61,7 +61,7 @@ class Login extends controller
 		return $this->fetch('Login/pass');
 	}
 
-	//登出
+	// 登出
 	public function login_out()
 	{
 		Session::set('admin_user',null);

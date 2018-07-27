@@ -14,7 +14,7 @@ class Demand extends AdminBase
 		return view('Demand/demand_list',['list'=>$data['list'],'page'=>$data['page']]);
 	}
 
-	//设置文章的显示状态
+	// 设置文章的显示状态
     public function is_show()
     {
     	$is_show = $this->request->post('is_show');
@@ -22,7 +22,7 @@ class Demand extends AdminBase
     	if($res){echo json_encode(['ok'=>'y']);exit;}
     }
 
-    //删除需求
+    // 删除需求
     public function delete()
     {
     	$xid = $this->request->post('xid');

@@ -17,13 +17,13 @@ class Index extends HomeBase
 
     public function index()
     {
-    	//友情链接
+    	# 友情链接
     	$link = Db::name('link')->where('is_show',1)->order('sort desc')->field('lname,url')->cache('link',3600)->select();
 
-    	//查询首页轮播图
+    	# 查询首页轮播图
     	$banner = Db::name('advert')->where(['type'=>1,'is_show'=>1])->field('mid,mname,img,url')->cache('banner',3600)->select();
     	
-    	//读取最新发布的文章
+    	# 读取最新发布的文章
 		$article = new ArticleModel();
     	$res = $article->getPageData('all','all','1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');
     	
@@ -35,20 +35,20 @@ class Index extends HomeBase
         ]);
     }
 
-    //文章查询
+    // 文章查询
     public function article_search(Request $request)
     {
-    	//标签列表
+    	# 标签列表
     	$tags = Db::name('tags')->order('tid desc')->select();
     	$tag  = $this->request->param('tid');
     	$word = $this->request->param('word','','htmlentities');
     	if(!empty($tag) && empty($word)){
-    		//标签查询
+    		# 标签查询
     		$model = new ArticleModel();
     		$article= $model->getPageData('all',$tag,'1','title,a.aid,path,click,comment_num,create_time,description,a.cid,a.keywords');
     		return view('Index/article_search',['list'=>$article['list'],'word'=>$word,'tags'=>$tags]);
     	}else{
-    		//关键词查询
+    		# 关键词查询
     		$where['title'] = ['like',"%".$word."%"];
     		$article = Db::name('article')
     			 ->alias('a')
@@ -60,7 +60,7 @@ class Index extends HomeBase
     	
     }
 
-	//注册会员
+	// 注册会员
 	public function register(Request $request)
 	{
 		$this->view->engine->layout(false);
@@ -71,7 +71,7 @@ class Index extends HomeBase
 			}else{
 
 				$data = $this->request->post();
-				#数据验证
+				# 数据验证
 				$result = $this->validate($data,'UserValidate');
 				if(true !== $result){
 					$this->error($result);
@@ -85,7 +85,7 @@ class Index extends HomeBase
 	}
 	
 	
-	//会员登录
+	// 会员登录
 	public function login(Request $request)
 	{
 		$this->view->engine->layout(false); 
@@ -97,11 +97,11 @@ class Index extends HomeBase
 			if(!captcha_check($this->request->post('code'))){
 				$this->error('验证码错误');exit;
 			}else{
-				//验证用户账号密码
+				# 验证用户账号密码
 				$user = new Users();
 				$result  = $user->check_password($username,$password);
 				if($result != false && $result['status'] == 1){
-					//保存用户的信息
+					# 保存用户的信息
 					Session::set('users',$result);
 					if($remember == 1)
 					{
@@ -120,7 +120,7 @@ class Index extends HomeBase
 		return view('Index/login');
 	}
 	
-	//退出登录
+	// 退出登录
 	public function log_out()
 	{
 		Session::set('users',null);
@@ -128,7 +128,7 @@ class Index extends HomeBase
 	}
 
 
-	//检测用户名是否重复
+	// 检测用户名是否重复
 	public function check_username()
 	{
 		$username = $this->request->post('username');

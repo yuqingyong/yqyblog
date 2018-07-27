@@ -1,3 +1,0 @@
-<?php
-//000000086400a:2:{i:0;a:9:{s:5:"title";s:23:"Redis从安装到使用";s:3:"aid";i:167;s:4:"path";s:20:"/upload/167thumb.png";s:5:"click";i:50;s:11:"comment_num";i:0;s:11:"create_time";i:1527047349;s:11:"description";s:38:"Redis的各种环境下安装和使用";s:3:"cid";i:2;s:8:"keywords";s:5:"Redis";}i:1;a:9:{s:5:"title";s:35:"Redis在PHP中的基本使用案例";s:3:"aid";i:120;s:4:"path";s:20:"/upload/120thumb.png";s:5:"click";i:176;s:11:"comment_num";i:0;s:11:"create_time";i:1506133300;s:11:"description";s:35:"Redis在PHP中的基本使用案例";s:3:"cid";i:2;s:8:"keywords";s:5:"Redis";}}
-?>
