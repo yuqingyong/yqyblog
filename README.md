@@ -3,4 +3,4 @@
 
 - 基于thinkphp5.0编写一套博客站点
 - 主要用于个人网站的搭建，技术的分享等
-- 站点域名：(http://www.yuqingyong)
+- 站点域名：[ http://www.yuqingyong.cn ]
